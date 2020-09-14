@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Redis的数据类型（5种基础，3种特殊） | Mr.ou`s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简述Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。它支持多种类型的数据结构，如 字符串（strings），散列（hashes）， 列表（lists），集合（sets），有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 Redis 内置了 复制（r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis的数据类型（5种基础，3种特殊）">
+<meta property="og:url" content="http://example.com/2020/08/16/Redis%E7%9A%84%E4%BA%94%E7%A7%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Mr.ou&#96;s Blog">
+<meta property="og:description" content="简述Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。它支持多种类型的数据结构，如 字符串（strings），散列（hashes）， 列表（lists），集合（sets），有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 Redis 内置了 复制（r">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816200125801.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816200630140.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816201210597.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816203054986.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816201914606.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816202214633.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816202652893.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816202829704.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081620325564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816203413601.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816203532497.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081620365839.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816203836916.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816204120592.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816204212552.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816204651889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816204924830.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081620514726.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205235529.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205335351.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205425227.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205506650.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205542342.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205631341.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816205746174.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081620581427.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081621010277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081621031829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816210446796.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816210638241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816210836153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211138885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211420456.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211506993.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211653807.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211748816.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211829334.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816211910252.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212031712.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081621224418.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212314774.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020081621235251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212426599.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212505417.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212547394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212620863.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212700862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212803996.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212834867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816212902838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213307464.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213337690.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213404516.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213444634.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213525208.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213543265.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213621171.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213652797.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213716899.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816213741884.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816214825251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816215259235.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816215427706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816215539104.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816215724208.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816215835495.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816215951512.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220018469.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220104665.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220232560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220314566.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220436540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220459366.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200816220528963.png">
+<meta property="article:published_time" content="2020-08-16T14:40:40.000Z">
+<meta property="article:modified_time" content="2020-08-16T15:58:50.127Z">
+<meta property="article:author" content="Mr.ou">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200816200125801.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Mr.ou`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Mr.ou`s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Redis的五种常用数据类型、三种特殊数据类型详解" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/16/Redis%E7%9A%84%E4%BA%94%E7%A7%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/" class="article-date">
+  <time datetime="2020-08-16T14:40:40.000Z" itemprop="datePublished">2020-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>►<a class="article-category-link" href="/categories/Redis/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Redis的数据类型（5种基础，3种特殊）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。<br>它支持多种类型的数据结构，如 <strong>字符串（strings），散列（hashes）， 列表（lists），集合（sets），有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询</strong>。 Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。</p>
+<p><a target="_blank" rel="noopener" href="https://redis.io/">Redis的英文官网</a><br><a target="_blank" rel="noopener" href="http://www.redis.cn/">Redis的中文官网</a><br><a target="_blank" rel="noopener" href="https://www.redis.net.cn/order/">Redis的中文命令手册</a></p>
+<p><strong>本文主要介绍Redis五种常用的数据类型、三种特殊的数据类型的使用、应用场景。</strong></p>
+<h1 id="Redis五种基本数据类型"><a href="#Redis五种基本数据类型" class="headerlink" title="Redis五种基本数据类型"></a>Redis五种基本数据类型</h1><h2 id="String字符串"><a href="#String字符串" class="headerlink" title="String字符串"></a>String字符串</h2><p> Redis 字符串是字节序列。Redis 字符串是二进制安全的，这意味着他们有一个已知的长度没有任何特殊字符终止，所以你可以存储任何东西，512 M为上限，主要的还是操作键值对。<br> String的数据结构是简单的Key-Value模型，Value可以是字符串，也可以是数字。</p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><strong>添加元素（SET命令）</strong></li>
+</ul>
+<p><strong>格式：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set key value [expiration EX seconds|PX milliseconds] [NX|XX]</span><br><span class="line"></span><br><span class="line">ex:秒级过期时间,nx:键不存在时才能设置成功,xx键存在时才能设置成功</span><br></pre></td></tr></table></figure>
+<p><strong>(1)普通添加：</strong><code>set key value</code><br><img src="https://img-blog.csdnimg.cn/20200816200125801.png" alt="在这里插入图片描述"><br><strong>(2)设置过期时间  setex：</strong><code>setex key seconds value</code><br><img src="https://img-blog.csdnimg.cn/20200816200630140.png" alt="在这里插入图片描述"><br>上图中：设置一个键为key1，值为hello，并且30秒后过期。<br>使用<code>ttl命令</code>可以查看该键还有多少时间过期。</p>
+<p><strong>(3)不存在设置  setnx（set if not exist）</strong>：<code>setnx key value </code><br>如果key不存在，则创建一个key，如果key存在，则创建失败并返回0。<br><img src="https://img-blog.csdnimg.cn/20200816201210597.png" alt="在这里插入图片描述"><br>上图中，执行第一条命令时，由于key2不存在，所以就创建一个key2，执行第二句命令时，由于key2前面已经创建了，已经存在了，所以就创建失败，并且返回0。</p>
+<p><strong>setnx在分布式锁中经常使用到</strong></p>
+<hr>
+<ul>
+<li><strong>获取值 （GET命令）</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set name oldou</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get name   #获取name中的值</span><br><span class="line">&quot;oldou&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>mset/mget命令</strong><br>同时设置/获取一个或者多个键值对，主要就是批量设置和获取键值对。<br><img src="https://img-blog.csdnimg.cn/20200816203054986.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>msetnx  key1 value1 key2 value2……</strong><br>同时设置多个值，如果其中有一个存在，那么就都创建失败。<br>要么一起成功，要么一起失败，这是一个<strong>原子性操作</strong>。</p>
+</li>
+<li><p><strong>incr命令</strong><br>让当前键值以 1 的数量递增，并返回递增后的值。相当于Java中的自增，每次使用改命令都能让变量自增1。<br><img src="https://img-blog.csdnimg.cn/20200816201914606.png" alt="在这里插入图片描述"><br><strong>应用场景：（一般可用于设置浏览量、阅读量）</strong></p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>incrby命令</strong><br>可以指定参数一次增加的数值，并返回递增后的值，(原来的num是2，加10之后变为12)<br><img src="https://img-blog.csdnimg.cn/20200816202214633.png" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>decr命令</strong><br>可以指定参数一次递减的数值，并返回递减后的值，每次使用该命令都自减1，相当于Java中的自减。<br><img src="https://img-blog.csdnimg.cn/20200816202652893.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>decrby</strong><br>可以指定参数一次递减的数值，并返回递减后的值<br><img src="https://img-blog.csdnimg.cn/20200816202829704.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>append命令</strong><br>向键值的末尾追加 value。如果键不存在则将该键的值设置为 value。<br>返回值是追加后字符串的总长度。<br><img src="https://img-blog.csdnimg.cn/2020081620325564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>strlen命令</strong> ：获取字符串长度<br><img src="https://img-blog.csdnimg.cn/20200816203413601.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>getrange命令：</strong>截去指定索引的字符串<br><img src="https://img-blog.csdnimg.cn/20200816203532497.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>setrange命令</strong>：从指定索引开始替换字符串<br><img src="https://img-blog.csdnimg.cn/2020081620365839.png#pic_center" alt="在这里插入图片描述"><br>以上表示从索引为0开始的元素替换为QQQQQ</li>
+</ul>
+<hr>
+<ul>
+<li><strong>del命令</strong>： 根据key删除一个或者多个元素<br><img src="https://img-blog.csdnimg.cn/20200816203836916.png" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li>设置对象<br><code>set user:1 &#123;name:zhangsan,age:3&#125;</code><br>设置一个user:1对象，值为json字符串来保存一个对象。<br>这是一个巧妙的设计：<code>user:&#123;id&#125;:&#123;field&#125;  </code>  如此设置在Redis中是完全OK的。<br><img src="https://img-blog.csdnimg.cn/20200816204120592.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>getset命令</strong>：先get然后再set<br>如果设置的键不存在值，则设置值，并且返回nil<br>如果设置的键存在值，则返回该值，并设置新的值<br><img src="https://img-blog.csdnimg.cn/20200816204212552.png" alt="在这里插入图片描述"><h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3></li>
+<li>计数器—点赞,视频播放量,每播放一次就+1</li>
+<li>统计多单位的数量</li>
+<li>粉丝数</li>
+<li>对象缓存存储</li>
+</ul>
+<h2 id="Hash散列表"><a href="#Hash散列表" class="headerlink" title="Hash散列表"></a>Hash散列表</h2><p><img src="https://img-blog.csdnimg.cn/20200816204651889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>Redis 的哈希是键值对的集合。<br>Redis 的哈希值是字符串字段和字符串值之间的映射，因此它们被用来表示对象，还有用户信息之类的，经常变动的信息。<br>Hash更适合用于对象的存储，String更适合字符串存储。</p>
+<hr>
+<h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li>（1）<code>hset命令</code>：存储一个哈希键值对的集合<br>格式为：hset key field value  —–表示的是在key的field下设置一个为“value”的值。<ul>
+<li>（2）<code>hget命令</code>：获取一个哈希键的值<br>格式为：hget key field<br><img src="https://img-blog.csdnimg.cn/20200816204924830.png" alt="在这里插入图片描述"></li>
+<li>（3）<code>hmset</code>： 存储一个或多个哈希是键值对的集合<br>格式为：hmset key field1 value1 ……fieldN keyN</li>
+<li>（4）<code>hmget</code>： 获取多个指定的键的值<br>格式为：hmget key field1 … fieldN<br><img src="https://img-blog.csdnimg.cn/2020081620514726.png#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>(5)<code>hexists</code>： 判断哈希表中的字段名是否存在 如果存在返回 1 否则返回 0<br>格式为：hexists key field<br><img src="https://img-blog.csdnimg.cn/20200816205235529.png" alt="在这里插入图片描述"></li>
+<li>（6）<code>hdel</code>： 删除一个或多个字段<br>格式为：hdel key field<br> <img src="https://img-blog.csdnimg.cn/20200816205335351.png" alt="在这里插入图片描述"></li>
+<li>（7）<code>hgetall</code>： 获取一个哈希是键值对的集合<br>格式为：hgetall key<br><img src="https://img-blog.csdnimg.cn/20200816205425227.png" alt="在这里插入图片描述"></li>
+<li>（8）<code>hvals</code>： 只返回字段值<br>格式为：hvals key<br><img src="https://img-blog.csdnimg.cn/20200816205506650.png" alt="在这里插入图片描述"></li>
+<li>（9）<code>hkeys</code>： 只返回字段名<br>格式为：hkeys key<br><img src="https://img-blog.csdnimg.cn/20200816205542342.png" alt="在这里插入图片描述"></li>
+<li>（10）<code>hlen</code>： 返回 key 的 hash 的元素个数<br>格式为：hlen key<img src="https://img-blog.csdnimg.cn/20200816205631341.png" alt="在这里插入图片描述"><br>这里是因为user下有两个属性 username和userage</li>
+</ul>
+<hr>
+<ul>
+<li>（11）<code>hincrby key field value </code>:   指定增量value<br><img src="https://img-blog.csdnimg.cn/20200816205746174.png" alt="在这里插入图片描述"></li>
+<li>（12）<code>hsetnx  key field value </code>:  如果该键不存在就创建，如果该键存在就创建失败。<br><img src="https://img-blog.csdnimg.cn/2020081620581427.png" alt="在这里插入图片描述"><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><strong>主要用于存储部分变更数据，比如存储用户信息等等</strong></li>
+</ul>
+<h2 id="List链表"><a href="#List链表" class="headerlink" title="List链表"></a>List链表</h2><p><img src="https://img-blog.csdnimg.cn/2020081621010277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>Redis 的链表是简单的字符串列表，排序插入顺序。您可以添加元素到 Redis 的列表的头部或尾部<br>Lpush：表示的是向链表的左添加，也就是向链表的头添加；<br>Rpush：表示的是向链表的右添加，也就是向链表的尾添加；</p>
+<h3 id="常用命令-2"><a href="#常用命令-2" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><p>（1）<code>lpush key value</code>： 向链表左侧添加—头插法<br><img src="https://img-blog.csdnimg.cn/2020081621031829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（2）<code>rpush key value</code>： 向链表右侧添加–尾插法<br><img src="https://img-blog.csdnimg.cn/20200816210446796.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（3）<code>lpop key</code>： 从左边移出一个元素，就是从最左边的那个节点剔除掉。<br><img src="https://img-blog.csdnimg.cn/20200816210638241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（4）<code>rpop key</code>： 从右边移出一个元素，就是从最右边的那个节点剔除掉。<br><img src="https://img-blog.csdnimg.cn/20200816210836153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（5）<code>lrange key start end lrange</code>: 命令将返回索引从 start 到 stop 之间的所有元素。Redis 的列表起始索引为 0。<br>如果是要获取全部的元素：<code>lrange key 0 -1</code></p>
+</li>
+<li><p>（6）<code>llen key</code>： 返回链表中元素的个数 相当于关系型数据库中 select count(*)<br><img src="https://img-blog.csdnimg.cn/20200816211138885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（7）<code>lindex key indexnumber</code> :lindex 命令用来返回指定索引的元素，索引从 0 开始，如果是负数表示从右边开始计算的索引，最右边元素的索引是-1。如果要将列表类型当做数组来用，lindex 命令是必不可少的。<br><img src="https://img-blog.csdnimg.cn/20200816211420456.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（8）<code>lset key indexnumber value</code>： 是另一个通过索引操作列表的命令，它会将索引为 index的元素赋值为 value，原来的值会被覆盖。如果该列表不存在就会报错。所以使用这个命令之前先使用exists判断一下。<br><img src="https://img-blog.csdnimg.cn/20200816211506993.png#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（9）<code>lrem key count value  </code>:  移除key链表中count个元素的value值，精确匹配，如果链表中可以有多个重复的值，这里的count指的是可以删除多个相同key的值。<br><img src="https://img-blog.csdnimg.cn/20200816211653807.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（10）<code>ltrim  list  startIndex   endIndex </code> ：通过下标截取指定的长度，这个时候list已经改变了，只剩下截断的元素。<br><img src="https://img-blog.csdnimg.cn/20200816211748816.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（11）<code>rpoplpush  source  destination</code> ：移除当前的source链表中的最后一个元素，并且将该元素移动到destination链表当中。<br><img src="https://img-blog.csdnimg.cn/20200816211829334.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（12）<code>linsert key BEFORE|AFTER pivot value</code>：在key列表的pivot元素的前/后面插入元素value。<br><img src="https://img-blog.csdnimg.cn/20200816211910252.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>小结：</p>
+</li>
+<li><p>实际上list是一个链表，before  node  after，left ，right都可以插入值；</p>
+</li>
+<li><p>如果key不存在，就创建新的链表；</p>
+</li>
+<li><p>如果key存在就创建新的值；</p>
+</li>
+<li><p>如果移除了所有的值，空链表，也就代表不存在；</p>
+</li>
+<li><p>在两边插入或者改动值，效率最高，中间元素相对来说效率会低一点。</p>
+</li>
+</ul>
+<h3 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h3><ul>
+<li>消息队列：利用List的PUSH操作，将任务存在List中，然后工作线程再用POP操作将任务取出进行执行。Redis还提供了操作List中某一段的api，你可以直接查询，删除List中某一段的元素。</li>
+<li>消息排队，消息队列（Lpush、Rpop）、栈（Lpush、Lpop）</li>
+<li>使用list可以构建队列系统，使用sorted set甚至可以构建有优先级的队列系统。<h2 id="Set-集合"><a href="#Set-集合" class="headerlink" title="Set( 集合)"></a>Set( 集合)</h2><img src="https://img-blog.csdnimg.cn/20200816212031712.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>Redis 的集合是字符串的无序集合。<br>在Set集合当中，是不允许有重复的。<br>set是通过hash table实现的，可以进行添加、删除和查找。对集合我们可以取并集，交集，差集.<h3 id="常用命令-3"><a href="#常用命令-3" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li>（1）<code>sadd key value</code>：添加一个 string 元素到,key 对应的 set 集合中， 成功返回 1,如果元素已经在集合中返回 0<br><img src="https://img-blog.csdnimg.cn/2020081621224418.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></li>
+</ul>
+</li>
+<li>（2）<code>scard key</code>： 返回 set 的元素个数，如果 set 是空或者 key 不存在返回 0<br><img src="https://img-blog.csdnimg.cn/20200816212314774.png" alt="在这里插入图片描述"><ul>
+<li>（3）<code>smembers key</code>： 返回 key 对应 set 的所有元素，结果是无序的<br><img src="https://img-blog.csdnimg.cn/2020081621235251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+</li>
+<li>（4）<code>sismember key value</code>： 判断 value 是否在 set 中，存在返回 1，0 表示不存在或者 key 不存在<br><img src="https://img-blog.csdnimg.cn/20200816212426599.png" alt="在这里插入图片描述"></li>
+<li>（5）<code>srem key value</code>： 从 key 对应 set 中移除给定元素，成功返回 1，如果 value 在集合中不存在或者 key 不存在返回 0<br><img src="https://img-blog.csdnimg.cn/20200816212505417.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>（6）<code>srandmember  key  nums </code>    :   从key集合中随机抽取nums个元素。<br><img src="https://img-blog.csdnimg.cn/20200816212547394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>（7）<code>spop key </code>：随机删除一些key集合中的元素。<br><img src="https://img-blog.csdnimg.cn/20200816212620863.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>（8）<code>smove source destination member </code> ：将原集合source中的member元素移动到destination集合中。<br><img src="https://img-blog.csdnimg.cn/20200816212700862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+<hr>
+<ul>
+<li>（9）<code>sdiff  key1  key2 </code>：取出key1中与key2集合的不同元素，差集<br><img src="https://img-blog.csdnimg.cn/20200816212803996.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>（10）<code>sinter key1 key2</code> ：取key1与key2两个集合中相同的元素，交集<br><img src="https://img-blog.csdnimg.cn/20200816212834867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>（11）<code>sunion key1  key2</code>：将key1与key2两个集合中的元素合在一起，并集<br><img src="https://img-blog.csdnimg.cn/20200816212902838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><h3 id="应用场景-2"><a href="#应用场景-2" class="headerlink" title="应用场景"></a>应用场景</h3></li>
+<li>微博、用户将所有关注的人都放入到一个set集合当中，将它的粉丝也放在一个集合中。</li>
+<li>共同关注、共同爱好、二度好友、QQ的好友推荐（六度分割理论）</li>
+</ul>
+<h2 id="SortedSet-有序集合-zset"><a href="#SortedSet-有序集合-zset" class="headerlink" title="SortedSet( 有序集合)  zset"></a>SortedSet( 有序集合)  zset</h2><p>Redis 的有序集合类似于 Redis 的集合，字符串不重复的集合。</p>
+<h3 id="常用命令介绍"><a href="#常用命令介绍" class="headerlink" title="常用命令介绍"></a>常用命令介绍</h3><ul>
+<li><p>（1）<code>zadd key score value</code>： 将一个或多个 value 及其 socre 加入到 set 中<br><img src="https://img-blog.csdnimg.cn/20200816213307464.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（2）<code>zrange key start end </code>：0 和-1 表示从索引为 0 的元素到最后一个元素（同 LRANGE 命令相似）<br><img src="https://img-blog.csdnimg.cn/20200816213337690.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（3）<code>zrange key 0 -1 withscores</code> 也可以连同 score 一块输出，使用 WITHSCORES 参数<br><img src="https://img-blog.csdnimg.cn/20200816213404516.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（4）<code>zremrangebyscore key start end </code>：可用于范围删除操作<br><img src="https://img-blog.csdnimg.cn/20200816213444634.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（5）<code>zrangebyscore  key  min max</code>: 升序排序操作，将key按最小值到最大值进行输出。<br><code>zrevrange salary 0 -1 </code>：这个是倒序全部输出<br><img src="https://img-blog.csdnimg.cn/20200816213525208.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200816213543265.png#pic_center" alt="在这里插入图片描述"><br>以上是从小到大排序，也就是升序排序。</p>
+</li>
+<li><p>（6）<code>zrevrangebyscore key max min </code>：倒序排序操作，将key按照从大到小排序输出<br><img src="https://img-blog.csdnimg.cn/20200816213621171.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（6）<code>zrem  key  value</code> :  删除指定的元素<br><img src="https://img-blog.csdnimg.cn/20200816213652797.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（7）<code>zcard key</code> ：获取有序集合中的个数<br><img src="https://img-blog.csdnimg.cn/20200816213716899.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（8）<code>zcount key min  max </code>: 获取指定区间的成员数量<br><img src="https://img-blog.csdnimg.cn/20200816213741884.png" alt="在这里插入图片描述"></p>
+<h3 id="应用场景-3"><a href="#应用场景-3" class="headerlink" title="应用场景"></a>应用场景</h3></li>
+<li><p>存储班级成绩表、工资表排序</p>
+</li>
+</ul>
+<h1 id="Redis三种特殊的数据类型"><a href="#Redis三种特殊的数据类型" class="headerlink" title="Redis三种特殊的数据类型"></a>Redis三种特殊的数据类型</h1><p>本次介绍的三种特殊类型为：</p>
+<ul>
+<li>Geospatial 地理位置</li>
+<li>Hyperloglog 基数统计</li>
+<li>Bitmap位图场景</li>
+</ul>
+<h2 id="Geospatial-地理位置"><a href="#Geospatial-地理位置" class="headerlink" title="Geospatial 地理位置"></a>Geospatial 地理位置</h2><p>我们日常生活中的定位、查看附近的人、朋友的定位、打车距离计算等等，基本上都是使用Geospatial 。</p>
+<p>Redis的Geo在Redis3.2版本就推出了这个功能，这个功能可以推算出地理位置的信息，两地之间的距离，方圆几里的人。</p>
+<p><a target="_blank" rel="noopener" href="https://www.redis.net.cn/order/3687.html">链接地址点这里</a><br>它主要有以下六个命令：<br><img src="https://img-blog.csdnimg.cn/20200816214825251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="命令介绍"><a href="#命令介绍" class="headerlink" title="命令介绍"></a>命令介绍</h3><ul>
+<li>（1）<code>geoadd命令</code>：将指定的地理空间位置（纬度、经度、名称）添加到指定的key中。<br><strong>格式</strong>：<code>geoadd   key   经度   纬度   地理位置   </code><br>例如：geoadd china:city 116.40 39.90 beijing<br>有效的经度从-180度到180度。<br>有效的纬度从-85.05112878度到85.05112878度。<br>当坐标位置超出上述指定范围时，该命令将会返回下述错误。<br><code>(error) ERR invalid longitude,latitude pair 39.900000,116.400000</code></li>
+</ul>
+<p>同时，这个命令还可以添加多个元素，例如：<br><code>geoadd china:city 116.40 39.90 beijing  121.47 32.23 shanghai</code><br><img src="https://img-blog.csdnimg.cn/20200816215259235.png#pic_center" alt="在这里插入图片描述"><br><strong>规则：两级（南极北极）是无法直接添加的，一般会下载城市数据，直接通过Java程序一次性导入。</strong></p>
+<ul>
+<li><p>（2）<code>geopos命令</code>：从key里返回所有给定位置元素的位置（经度和纬度）。<br><strong>格式</strong>：<code>geopos  key member  </code><br>例如：<code>geopos china:city beijing</code><br>返回值：GEOPOS 命令返回一个数组， 数组中的每个项都由两个元素组成： 第一个元素为给定位置元素的经度， 而第二个元素则为给定位置元素的纬度。<br>当给定的元素不存在时，对应的数组项为空值。<br><img src="https://img-blog.csdnimg.cn/20200816215427706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</li>
+<li><p>（3）<code>geodist命令</code>：返回两个给定位置之间的直线距离，如果两个位置之间的其中一个不存在，那么命令就返回空值。<br><strong>格式：</strong><code>geodist   key member1  member2  [unit]       </code><br>指定单位的参数 unit 必须是以下单位的其中一个：<br>m 表示单位为米。<br>km 表示单位为千米。<br>mi 表示单位为英里。<br>ft 表示单位为英尺。<br>如果用户没有显式地指定单位参数， 那么 <strong>GEODIST 默认使用米作为单位</strong>。<br><img src="https://img-blog.csdnimg.cn/20200816215539104.png#pic_center" alt="在这里插入图片描述"><br>GEODIST 命令在计算距离时会假设地球为完美的球形， 在极限情况下， 这一假设最大会造成 0.5% 的误差。</p>
+</li>
+<li><p>（4）<code>georadius命令</code>：以给定的经纬度为中心，找出某一半径内的元素。<br>以给定的经纬度为中心，返回键包含的位置元素当中，与中心的距离不超过给定最大距离的所有位置元素。<br><strong>格式</strong>：<code>georadius key longitude latitude radius m|km|ft|mi  </code><br>例如： georadius china:city 110 23 1000 km<br>key为键，longitude、latitude表示当前位置的经纬度，radius表示搜索半径，m|km|ft|mi表示单位。<br><img src="https://img-blog.csdnimg.cn/20200816215724208.png#pic_center" alt="在这里插入图片描述"><br>上图的代码解释：<br>以110  23为经纬度查询方圆1000km内的城市。前提是所有的数据录入了china:city中。</p>
+</li>
+</ul>
+<p>其余参数解释：<br><code>georadius key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE k]</code><br>在给定以下可选项时， 命令会返回额外的信息：<br><code>WITHDIST</code>: 在返回位置元素的同时， 将位置元素与中心之间的距离也一并返回。 距离的单位和用户给定的范围单位保持一致。显示到中间距离的位置。<br><code>WITHCOORD</code>: 将位置元素的经度和维度也一并返回。显示他人的定位信息。<br><code>WITHHASH</code>: 以 52 位有符号整数的形式， 返回位置元素经过原始 geohash 编码的有序集合分值。 这个选项主要用于底层应用或者调试， 实际中的作用并不大。<br>命令默认返回未排序的位置元素。 通过以下两个参数， 用户可以指定被返回位置元素的排序方式：</p>
+<p><code>ASC</code>: 根据中心的位置， 按照从近到远的方式返回位置元素。<br><code>DESC</code>: 根据中心的位置， 按照从远到近的方式返回位置元素。<br>在默认情况下， GEORADIUS 命令会返回所有匹配的位置元素。 虽然用户可以使用<code>COUNT &lt;count&gt; </code>选项去获取前 N 个匹配元素， 但是因为命令在内部可能会需要对所有被匹配的元素进行处理， 所以在对一个非常大的区域进行搜索时， 即使只使用 COUNT 选项去获取少量元素， 命令的执行速度也可能会非常慢。 但是从另一方面来说， 使用 COUNT 选项去减少需要返回的元素数量， 对于减少带宽来说仍然是非常有用的。<br>获得指定的人数：2人<br><img src="https://img-blog.csdnimg.cn/20200816215835495.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>应用场景：附近的人。。</p>
+<ul>
+<li>（5）<code>georadiusbymember命令</code>：找出位于指定范围内的元素，中心点是由给定的位置元素决定。<br>这个命令和 GEORADIUS 命令一样， 都可以找出位于指定范围内的元素， 但是 GEORADIUSBYMEMBER 的中心点是由给定的位置元素决定的， 而不是像 GEORADIUS 那样， 使用输入的经度和纬度来决定中心点<br><strong>格式</strong>：<code>georadiusbymember key member radius m|km|ft|mi</code><br>例如：<code>georadiusbymember china:city shanghai 1000 km</code><br>后面的参数，可以参考GEORADIUS命令。<br><img src="https://img-blog.csdnimg.cn/20200816215951512.png#pic_center" alt="在这里插入图片描述"></li>
+<li>（6）<code>geohash命令</code>：返回一个或多个位置元素的Geohash字符串。<br>该命令返回11个字符的Geohash字符串，命令返回的 geohash 的位置与用户给定的位置元素的位置一一对应。<br><img src="https://img-blog.csdnimg.cn/20200816220018469.png#pic_center" alt="在这里插入图片描述"><br>将二维的经纬度转换为一维的字符串，如果两个字符串越接近，那么则距离越近。</li>
+</ul>
+<h3 id="底层实现原理"><a href="#底层实现原理" class="headerlink" title="底层实现原理"></a>底层实现原理</h3><p>GEO底层的实现原理其实就是Zset，我们可以使用Zset命令来操作GEO。<br><img src="https://img-blog.csdnimg.cn/20200816220104665.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="Hyperloglog-基数统计"><a href="#Hyperloglog-基数统计" class="headerlink" title="Hyperloglog 基数统计"></a>Hyperloglog 基数统计</h2><ul>
+<li><p>什么是基数？<br>一个可重复集合内不重复元素的个数就是基数。</p>
+</li>
+<li><p>简介<br>Redis 2.8.9版本就更新了Hyperloglog数据结构。<br>Redis Hyperloglog基数统计的算法。</p>
+</li>
+<li><p>优点：占用的内存是固定的，2^64不同元素的技术，只需要费12KB内存。如果要从内存角度来比较的话，Hyperloglog是首选。</p>
+</li>
+<li><p>举例：网页的UV（一个人访问一个网站多次，但是还是算作一个人）</p>
+</li>
+</ul>
+<p>传统的方式：使用set保护用户的ID，然后就可以统计set中的元素数量作为标准判断，这个方式如果保存大量的用户id，就会比较麻烦。</p>
+<p>我们的目的是为了计数，而不是存储用户id。</p>
+<h3 id="命令介绍-1"><a href="#命令介绍-1" class="headerlink" title="命令介绍"></a>命令介绍</h3><ul>
+<li>（1）<code>pfadd key  member1 member2 .... </code>：添加一个或者多个元素</li>
+<li>（2）<code>pfcount key </code>：统计key集合中基数的个数<br><img src="https://img-blog.csdnimg.cn/20200816220232560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></li>
+<li>（3）<code>pfmerge newKey  key1  key2 ...  </code>：合并key1和key2中的元素，并且剔除其中重复的元素，产生新的集合newKey。<br><img src="https://img-blog.csdnimg.cn/20200816220314566.png#pic_center" alt="在这里插入图片描述"><br>key1中的元素有：a b c d e f g<br>key2中的元素有：h i j a e q n m c<br>重复的元素有：a e c<br>产生的newKey中的元素有：a b c d e f g h i j q n m </li>
+</ul>
+<h3 id="应用场景：适合做页面统计。"><a href="#应用场景：适合做页面统计。" class="headerlink" title="应用场景：适合做页面统计。"></a>应用场景：适合做页面统计。</h3><p>如果允许容错，那么一定要使用Hyperloglog；<br>如果不允许容错，就使用set或者自己的数据类型即可。<br>（容错就是当由于种种原因在系统中出现了数据、文件损坏或丢失时，系统能够自动将这些损坏或丢失的文件和数据恢复到发生事故以前的状态，使系统能够连续正常运行的一种技术，很简单的意思）</p>
+<h2 id="Bitmap位图场景"><a href="#Bitmap位图场景" class="headerlink" title="Bitmap位图场景"></a>Bitmap位图场景</h2><ul>
+<li>概括<br>Bitmap是位图，数据结构，都是操作二进制位来进行记录，就只有0和1两个状态。<br>365天 = 365bit      1字节 = 8bit      大约45个字节左右</li>
+</ul>
+<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><ul>
+<li><p>（1）<code>setbit key offset value </code>：value只能是0或者1，如下例子所示：<br><img src="https://img-blog.csdnimg.cn/20200816220436540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>使用bitmap来记录周一到周日的打卡。<br>上图中的offeset表示周几，value的0表示未打卡，1表示打开成功。<br>周一0：1，周二1：0，周三2：1，周四3：1，……….</p>
+</li>
+<li><p>（2）<code>getbit key offset</code>：获取key中的offset值，查看某一天是否打卡<br><img src="https://img-blog.csdnimg.cn/20200816220459366.png#pic_center" alt="在这里插入图片描述"><br>以上表示的是查看周四是否打卡，周日是否打卡。</p>
+</li>
+<li><p>（3）<code>bitcount key </code>：统计操作，统计打开的天数，相当于统计sign中value为1的元素个数<img src="https://img-blog.csdnimg.cn/20200816220528963.png" alt="在这里插入图片描述"></p>
+<h3 id="应用场景-4"><a href="#应用场景-4" class="headerlink" title="应用场景"></a>应用场景</h3><p>统计用户信息、活跃、不活跃、登录、未登录、打卡等等….. 两个状态的都可以使用Bitmap。</p>
+</li>
+</ul>
+<p>在生活或者开发中都有十分多的应用场景。</p>
+<h1 id="面试题常问的数据类型"><a href="#面试题常问的数据类型" class="headerlink" title="面试题常问的数据类型"></a>面试题常问的数据类型</h1><blockquote>
+<p>1、Redis 的数据类型有哪些？ </p>
+</blockquote>
+<ul>
+<li><p>Redis支持五种数据类型：String（字符串）、hash（哈希）、list（列表）、set（集合）以及zsetsorted set（有序集合）。</p>
+</li>
+<li><p>我们实际项目中比较常用的是String和hash，如果你是Redis的中高级用户，还需要加上以下几种数据类型，分别是：HyperLogLog、Geo、Pub/Sub。</p>
+</li>
+<li><p>如果你玩过Redis Module，像BloomFilter、RedisSearch、Redis-ML，，等等，是加分项。</p>
+</li>
+</ul>
+<blockquote>
+<p>2、一个字符串类型的值能存储最大容量是多少？ </p>
+</blockquote>
+<p>一个字符串类型的值能存储的最大容量为512M。</p>
+<blockquote>
+<p>3、Redis key 的过期时间和永久有效分别怎么设置？</p>
+</blockquote>
+<ul>
+<li><p>使用expire命令对key的过期时间进行设置；</p>
+</li>
+<li><p>使用persist命令对key永久有效进行设置；</p>
+</li>
+</ul>
+<blockquote>
+<p>4、一个 Redis 实例最多能存放多少的 keys？List、Set、Sorted Set他们最多能存放多少元素？</p>
+</blockquote>
+<p>理论上Redis可以处理多达232个keys，并且在实际中进行了测试，每个实例至少存放了2亿5千万的keys。</p>
+<p>任何list、set和sorted set都可以放232个元素，换句话说，Redis的存储极限是系统中的可用内存值。</p>
+<blockquote>
+<p>5、Redis 最适合的场景？ </p>
+</blockquote>
+<ul>
+<li>（1）会话缓存（最常用的一种使用 Redis 的情景是会话缓存（session cache）。用 Redis 缓存会话比其他存储（如 Memcached）的优势在于：Redis 提供持久化。当维护一个不是严格要求一致性的缓存时，如果用户的购物车信息全部丢失，大部分人都会不高兴的，现在，他们还会这样吗？ 幸运的是，随着 Redis 这些年的改进，很容易找到怎么恰当的使用 Redis 来缓存会话的文档。甚至广为人知的商业平台Magento 也提供 Redis 的插件。</li>
+<li>（2）全页缓存（FPC）<br>除基本的会话 token 之外，Redis 还提供很简便的 FPC 平台。回到一致性问题，即使重启了 Redis 实例，因为有磁盘的持久化，用户也不会看到页面加载速度的下降，这是一个极大改进，类似 PHP 本地 FPC。 再次以 Magento 为例，Magento提供一个插件来使用 Redis 作为全页缓存后端。 此外，对 WordPress 的用户来说，Pantheon 有一个非常好的插件 wp-redis，这个插件能帮助你以最快速度加载你曾浏览过的页面。</li>
+<li>（3）队列<br>Reids 在内存存储引擎领域的一大优点是提供 list 和 set 操作，这使得 Redis能作为一个很好的消息队列平台来使用。Redis 作为队列使用的操作，就类似于本地程序语言（如 Python）对 list 的 push/pop 操作。 如果你快速的在 Google中搜索“Redis queues”，你马上就能找到大量的开源项目，这些项目的目的就是利用 Redis 创建非常好的后端工具，以满足各种队列需求。例如，Celery 有一个后台就是使用 Redis 作为 broker，你可以从这里去查看。</li>
+<li>（4）排行榜/计数器<br>Redis 在内存中对数字进行递增或递减的操作实现的非常好。集合（Set）和有序集合（Sorted Set）也使得我们在执行这些操作的时候变的非常简单，Redis 只是正好提供了这两种数据结构。所以，我们要从排序集合中获取到排名最靠前的 10个用户–我们称之为“user_scores”，我们只需要像下面一样执行即可： 当然，这是假定你是根据你用户的分数做递增的排序。如果你想返回用户及用户的分数，你需要这样执行： ZRANGE user_scores 0 10 WITHSCORES Agora Games 就是一个很好的例子，用 Ruby 实现的，它的排行榜就是使用 Redis 来存储数据的，你可以在这里看到。</li>
+<li>（5）发布/订阅<br>最后（但肯定不是最不重要的）是 Redis 的发布/订阅功能。发布/订阅的使用场景确实非常多。我已看见人们在社交网络连接中使用，还可作为基于发布/订阅的脚本触发器，甚至用 Redis 的发布/订阅功能来建立聊天系统！）</li>
+</ul>
+<blockquote>
+<p>6、假如 Redis 里面有 1 亿个 key，其中有 10w 个 key 是以某个固定的已知的前缀开头的，如果将它们全部找出来？ </p>
+</blockquote>
+<p>使用keys指令可以扫出指定模式的key列表。</p>
+<blockquote>
+<p>7、如果这个Redis正在给线上的业务提供服务，那使用keys指令会有什么问题？<br>这个时候就要回答：Redis是单线程的，keys指令会导致线程阻塞一段时间，线上服务会停顿，知道指令执行完毕，服务才能恢复。这个时候可以使用scan指令，scan指令可以无阻塞的提取指令模式的key列表，但是会有一定的重复概率，在客户端做一次去重就可以了，但是整体所花费的时间会比直接用keys指令长。</p>
+</blockquote>
+<blockquote>
+<p>8、如果有大量的 key 需要设置同一时间过期，一般需要注意什么？ </p>
+</blockquote>
+<p>如果大量的key过期时间设置过于集中，那么到过期的那个时间点，Redis可能会出现短暂的卡顿现象。一般需要在时间上加一个随机值，使得过期时间分散一点。</p>
+<blockquote>
+<p>9、使用过 Redis 做异步队列么，你是怎么用的？</p>
+</blockquote>
+<p>一般使用list结构作为队列，rpush生产消息，lpop消费消息。<br>当lpop没有消息的时候，要适当sleep一会儿再重试。</p>
+<blockquote>
+<p>追问：可不可以不使用sleep呢？</p>
+</blockquote>
+<p>list还有个指令叫blpop，在没有消息的时候，它会阻塞住，直到消息到来。</p>
+<blockquote>
+<p>再追问：能不能生产一次，消费多次呢？</p>
+</blockquote>
+<p>使用pub/sub主题订阅者模式，可以使用1:N的消息队列。</p>
+<blockquote>
+<p>再问：pub/sub有什么缺点？</p>
+</blockquote>
+<p>在消费者下线的情况下，生产的消息会丢失，解决这样的问题得使用专业的消息队列，如RabbitMQ等。</p>
+<blockquote>
+<p>Redis如何实现延时队列呢？</p>
+</blockquote>
+<p>使用sortedset，拿时间戳作为score，消息内容作为key调用zadd来生产消息，消费者用zrangbyscore指令获取N秒之前的数据轮询进行处理。</p>
+<blockquote>
+<p>10、使用过 Redis 分布式锁么，它是什么回事？</p>
+</blockquote>
+<p>先拿setnx来争抢锁，抢到之后再用expire给锁加一个过期时间防止锁忘记了释放。</p>
+<blockquote>
+<p>问：如果在setnx之后执行expire之前进程意外crash或者要重启维护了，那会怎么样？</p>
+</blockquote>
+<p>这个时候确实锁会永远得不到释放了，但是set指令有个非常复杂的参数是可以同时把setnx和expire合成一条指令来用的。</p>
+<h1 id="寄言"><a href="#寄言" class="headerlink" title="寄言"></a>寄言</h1><p>学习Redis建议看官网的文档进行学习，Redis还有许多的命令未介绍出来，如果在工作中使用到了，可以去Redis官方文档中查看，这里介绍一个Redis的<a target="_blank" rel="noopener" href="https://www.redis.net.cn/order/">中文命令手册</a>点击即达。</p>
+<blockquote>
+<p>创作不易，如果觉得对你有帮助，可以点个赞支持一下哈。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/08/16/Redis%E7%9A%84%E4%BA%94%E7%A7%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/" data-id="ckf1vxjhr003kk0ukdnx7a2p2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/16/Redis%E5%9F%BA%E6%9C%AC%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8Redis%E5%AE%9E%E7%8E%B0%E4%B9%90%E8%A7%82%E9%94%81/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Redis基本事务以及实现乐观锁
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BRedis%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D%E3%80%81%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F%E3%80%81%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis的常用命令、配置文件介绍、数据持久化方式、集群搭建</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%AE%B9%E5%99%A8/">Java容器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%AE%B9%E5%99%A8/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/">TCP/IP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/">Zookeeper</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">个人博客</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/">经验分享</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%AE%B9%E5%99%A8/" rel="tag">Java容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E5%AD%A6%E4%B9%A0/" rel="tag">Linux学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ%E5%AD%A6%E4%B9%A0/" rel="tag">RabbitMQ学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E5%AD%A6%E4%B9%A0/" rel="tag">Redis学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring%E5%AD%A6%E4%B9%A0/" rel="tag">Spring学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP-IP/" rel="tag">TCP/IP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" rel="tag">Zookeeper学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" rel="tag">经验分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">Java基础</a> <a href="/tags/Java%E5%AE%B9%E5%99%A8/" style="font-size: 10px;">Java容器</a> <a href="/tags/Linux%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">Linux学习</a> <a href="/tags/RabbitMQ%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">RabbitMQ学习</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/Redis%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Redis学习</a> <a href="/tags/SpringBoot/" style="font-size: 12.5px;">SpringBoot</a> <a href="/tags/Spring%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Spring学习</a> <a href="/tags/TCP-IP/" style="font-size: 10px;">TCP/IP</a> <a href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">Zookeeper学习</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">个人博客</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">学习笔记</a> <a href="/tags/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" style="font-size: 10px;">经验分享</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.5px;">面试题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/09/09/SpringBoot%E4%B8%AD%E4%BD%BF%E7%94%A8Druid%E6%95%B4%E5%90%88JDBC/">SpringBoot整合JDBC</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/08/%E7%AC%AC%E4%B8%80%E4%B8%AASpringBoot%E7%A8%8B%E5%BA%8F%E4%BB%A5%E5%8F%8A%E5%B0%8F%E5%BD%A9%E8%9B%8B/">第一个SpringBoot程序以及启动图标设置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/16/Redis%E5%9F%BA%E6%9C%AC%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8Redis%E5%AE%9E%E7%8E%B0%E4%B9%90%E8%A7%82%E9%94%81/">Redis基本事务以及实现乐观锁</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/16/Redis%E7%9A%84%E4%BA%94%E7%A7%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/">Redis的数据类型（5种基础，3种特殊）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BRedis%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D%E3%80%81%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F%E3%80%81%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">Redis的常用命令、配置文件介绍、数据持久化方式、集群搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Mr.ou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

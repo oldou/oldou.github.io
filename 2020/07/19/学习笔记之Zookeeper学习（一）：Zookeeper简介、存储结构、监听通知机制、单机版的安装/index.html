@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>学习笔记之Zookeeper学习（二）：Zookeeper集群的安装、启动关闭脚本的编写、常用命令介绍 | Mr.ou`s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、Zookeeper 简介Zookeeper 官网： http:&#x2F;&#x2F;zookeeper.apache.org&#x2F;Zookeeper 是 Apache 的一个分布式服务框架，是 Apache Hadoop 的一个子项目。官方文档上这么解释 Zookeeper，它主要是用来解决分布式应用中经常遇到的一些数据管理问题，如：统一命名服务、状态同步服务、集群管理、分布式应用配置项的管理等。简单来说 zook">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记之Zookeeper学习（二）：Zookeeper集群的安装、启动关闭脚本的编写、常用命令介绍">
+<meta property="og:url" content="http://example.com/2020/07/19/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BZookeeper%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AZookeeper%E7%AE%80%E4%BB%8B%E3%80%81%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%E3%80%81%E7%9B%91%E5%90%AC%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6%E3%80%81%E5%8D%95%E6%9C%BA%E7%89%88%E7%9A%84%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="Mr.ou&#96;s Blog">
+<meta property="og:description" content="一、Zookeeper 简介Zookeeper 官网： http:&#x2F;&#x2F;zookeeper.apache.org&#x2F;Zookeeper 是 Apache 的一个分布式服务框架，是 Apache Hadoop 的一个子项目。官方文档上这么解释 Zookeeper，它主要是用来解决分布式应用中经常遇到的一些数据管理问题，如：统一命名服务、状态同步服务、集群管理、分布式应用配置项的管理等。简单来说 zook">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200719201812653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200719204534884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200719205545618.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200719205836271.png">
+<meta property="article:published_time" content="2020-07-19T15:30:12.000Z">
+<meta property="article:modified_time" content="2020-07-20T01:13:43.349Z">
+<meta property="article:author" content="Mr.ou">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="Zookeeper学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200719201812653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Mr.ou`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Mr.ou`s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-学习笔记之Zookeeper学习（一）：Zookeeper简介、存储结构、监听通知机制、单机版的安装" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/19/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BZookeeper%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AZookeeper%E7%AE%80%E4%BB%8B%E3%80%81%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%E3%80%81%E7%9B%91%E5%90%AC%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6%E3%80%81%E5%8D%95%E6%9C%BA%E7%89%88%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-date">
+  <time datetime="2020-07-19T15:30:12.000Z" itemprop="datePublished">2020-07-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Zookeeper/">Zookeeper</a>►<a class="article-category-link" href="/categories/Zookeeper/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      学习笔记之Zookeeper学习（二）：Zookeeper集群的安装、启动关闭脚本的编写、常用命令介绍
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、Zookeeper-简介"><a href="#一、Zookeeper-简介" class="headerlink" title="一、Zookeeper 简介"></a>一、Zookeeper 简介</h1><p>Zookeeper 官网： <a target="_blank" rel="noopener" href="http://zookeeper.apache.org/">http://zookeeper.apache.org/</a><br>Zookeeper 是 Apache 的一个分布式服务框架，是 Apache Hadoop 的一个子项目。官方<br>文档上这么解释 Zookeeper，它主要是用来解决分布式应用中经常遇到的一些数据管理问题，<br>如：统一命名服务、状态同步服务、集群管理、分布式应用配置项的管理等。<br>简单来说 zookeeper=文件系统+监听通知机制。</p>
+<h1 id="二、-Zookeeper-存储结构"><a href="#二、-Zookeeper-存储结构" class="headerlink" title="二、 Zookeeper 存储结构"></a>二、 Zookeeper 存储结构</h1><p><img src="https://img-blog.csdnimg.cn/20200719201812653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="（1）Znode"><a href="#（1）Znode" class="headerlink" title="（1）Znode"></a>（1）Znode</h2><p>在 Zookeeper 中，znode 是一个跟 Unix 文件系统路径相似的节点，可以向节点存储数据或者获取数据。<br>Zookeeper 底层是一套数据结构。这个存储结构是一个树形结构，其上的每一个节点，我们称之为“znode”。<br>Zookeeper 中的数据是按照“树”结构进行存储的。而且 znode 节点还分为 4 中不同的类型。<strong>每一个 znode 默认能够存储 1MB 的数据</strong>（对于记录状态性质的数据来说，够了），可以使用 zkCli 命令，登录到 Zookeeper 上，并通过<strong>ls、create、delete、get、set</strong>等命令操作这些 znode 节点。</p>
+<h2 id="（2）Znode-节点类型"><a href="#（2）Znode-节点类型" class="headerlink" title="（2）Znode 节点类型"></a>（2）Znode 节点类型</h2><h3 id="（2-1）-PERSISTENT-持久化目录节点"><a href="#（2-1）-PERSISTENT-持久化目录节点" class="headerlink" title="（2.1） PERSISTENT-持久化目录节点"></a>（2.1） PERSISTENT-持久化目录节点</h3><p>客户端与 zookeeper 断开连接后，该节点依旧存在。</p>
+<h3 id="（2-2）-PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点"><a href="#（2-2）-PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点" class="headerlink" title="（2.2） PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点"></a>（2.2） PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点</h3><p>客户端与 zookeeper 断开连接后，该节点依旧存在，只是 Zookeeper 给该节点名称进行顺序编号。</p>
+<h3 id="（2-3）-EPHEMERAL-临时目录节点"><a href="#（2-3）-EPHEMERAL-临时目录节点" class="headerlink" title="（2.3） EPHEMERAL-临时目录节点"></a>（2.3） EPHEMERAL-临时目录节点</h3><p>客户端与 zookeeper 断开连接后，该节点被删除。</p>
+<h3 id="（2-4）-EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点"><a href="#（2-4）-EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点" class="headerlink" title="（2.4） EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点"></a>（2.4） EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点</h3><p>客户端与 zookeeper 断开连接后，该节点被删除，只是 Zookeeper 给该节点名称进行顺序编号。</p>
+<h1 id="三、-监听通知机制"><a href="#三、-监听通知机制" class="headerlink" title="三、 监听通知机制"></a>三、 监听通知机制</h1><p>Zookeeper 是使用观察者设计模式来设计的。当客户端注册监听它关心的目录节点时，当目录节点发生变化（数据改变、被删除、子目录节点增加删除）时，Zookeeper 会通知客户端。</p>
+<h1 id="四、-安装-zookeeper（单机版）"><a href="#四、-安装-zookeeper（单机版）" class="headerlink" title="四、 安装 zookeeper（单机版）"></a>四、 安装 zookeeper（单机版）</h1><p>官方资源包可在 <a target="_blank" rel="noopener" href="https://zookeeper.apache.org/releases.html">https://zookeeper.apache.org/</a> 站点中下载。<br>可以去下载最新版，这里我介绍的zookeeper版本为：3.6.0。</p>
+<h2 id="1、安装Linux"><a href="#1、安装Linux" class="headerlink" title="1、安装Linux"></a>1、安装Linux</h2><p>如果不知道该怎么安装Linux，<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43246215/article/details/107430831">点击这里</a>。</p>
+<h2 id="2、安装JDK"><a href="#2、安装JDK" class="headerlink" title="2、安装JDK"></a>2、安装JDK</h2><p>如果不知道该怎么安装JDK，<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43246215/article/details/107432534">点击这里</a>。<br>并且配置jdk的环境变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;jdk</span><br><span class="line">export CLASSPATH&#x3D;.:$JAVA_HOME&#x2F;lib&#x2F;dt.jar:$JAVA_HOME&#x2F;lib&#x2F;tools.jar</span><br><span class="line">export PATH&#x3D;$JAVA_HOME&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、上传-Zookeeper"><a href="#3、上传-Zookeeper" class="headerlink" title="3、上传 Zookeeper"></a>3、上传 Zookeeper</h2><p>在虚拟机的root目录下新建了一个temp目录，我们将文件上传到temp目录下，如果不知道文件该怎么上传的请学习<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43246215/article/details/107432534">这个笔记</a>。<br>文件上传之后，将文件解压并且拷贝到/usr/local/zookeeper目录下，命令如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost temp]# tar -zxf zookeeper-3.6.0.tar.gz</span><br><span class="line">[root@localhost temp]# cp zookeeper-3.6.0 &#x2F;usr&#x2F;local&#x2F;zookeeper -r</span><br></pre></td></tr></table></figure>
+<p>然后可以进入zookeeper目录下使用ls查看目录结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. bin：放置运行脚本和工具脚本，</span><br><span class="line">2. conf：zookeeper 默认读取配置的目录，里面会有默认的配置文件</span><br><span class="line">3. docs：zookeeper 相关的文档</span><br><span class="line">4. lib：zookeeper 核心的 jar</span><br><span class="line">5. logs：zookeeper 日志</span><br></pre></td></tr></table></figure>
+<h2 id="4、配置zookeeper"><a href="#4、配置zookeeper" class="headerlink" title="4、配置zookeeper"></a>4、配置zookeeper</h2><p>Zookeeper 在启动时默认的去 conf 目录下查找一个名称为 zoo.cfg 的配置文件。在 zookeeper 应用目录中有子目录 conf。<br>其中有配置文件模板：zoo_sample.cfg，因此我们进入到该目录下将文件拷贝一份并且重新命名，将zookeeper 应用中的配置文件改为 conf/zoo.cfg。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd zookeeper&#x2F;conf</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br></pre></td></tr></table></figure>
+<p>之后便是修改配置文件 zoo.cfg - 设置数据缓存路径，我们先退回到zookeeper的目录下，使用mkdir命令新建一个文件夹data，使用pwd命令获取当前文件的路径，复制路径，然后再进入到conf目录下编辑配置文件 zoo.cfg。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ..</span><br><span class="line">mkdir data</span><br><span class="line">pwd</span><br><span class="line">cd ..&#x2F;conf</span><br><span class="line">vim zoo.cfg</span><br></pre></td></tr></table></figure>
+<p>然后将配置文件作一下修改，然后ESC，保存并退出(:wq)：<br><img src="https://img-blog.csdnimg.cn/20200719204534884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="5、启动Zookeeper"><a href="#5、启动Zookeeper" class="headerlink" title="5、启动Zookeeper"></a>5、启动Zookeeper</h2><p>以上配置完成之后，我们进入到zookeeper/bin目录下，<br>使用以下命令启动zookeeper：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">启动zookeeper：</span><br><span class="line">.&#x2F;zkServer.sh start</span><br><span class="line"></span><br><span class="line">关闭zookeeper：</span><br><span class="line">.&#x2F;zkServer.sh stop</span><br><span class="line"></span><br><span class="line">查看zookeeper状态：</span><br><span class="line">.&#x2F;zkServer.sh status</span><br></pre></td></tr></table></figure>
+<p>默认加载配置文件：./zkServer.sh start：默认的会去 conf 目录下加载 zoo.cfg 配置文件。<br>指定加载配置文件：./zkServer.sh start 配置文件的路径。<br>启动成功图为：<br><img src="https://img-blog.csdnimg.cn/20200719205545618.png" alt="在这里插入图片描述"></p>
+<h2 id="6、使用客户端连接单机版-Zookeeper"><a href="#6、使用客户端连接单机版-Zookeeper" class="headerlink" title="6、使用客户端连接单机版 Zookeeper"></a>6、使用客户端连接单机版 Zookeeper</h2><p>前提是先成功启动zookeeper，如果启动不成功请详细检查自己哪一步出错了。</p>
+<h3 id="6-1、连接方式一"><a href="#6-1、连接方式一" class="headerlink" title="6.1、连接方式一"></a>6.1、连接方式一</h3><p>到zookeeper的bin目录下使用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;zkCli.sh</span><br></pre></td></tr></table></figure>
+<p>默认连接地址为本机地址，默认连接端口为 2181<br>成功连接之后为：<br><img src="https://img-blog.csdnimg.cn/20200719205836271.png" alt="在这里插入图片描述"><br><strong>按Ctrl+C退出，或者输入命令quit</strong></p>
+<h3 id="6-2、连接方式二"><a href="#6-2、连接方式二" class="headerlink" title="6.2、连接方式二"></a>6.2、连接方式二</h3><p>这种方式可以远程调用，这里不做详细介绍，<br>还是在bin目录下执行以下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;zkCli.sh -server ip:port</span><br><span class="line">连接指定 IP 地址与端口</span><br></pre></td></tr></table></figure>
+<p>比如说我192.168.15.130的虚拟机下也装了一个zookeeper单机版，那我在启动两个虚拟主机的zookeeper之后，在本机的zookeeper/bin目录下使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;zkCli.sh -server 192.168.15.130:2181</span><br><span class="line">如果130的那台zookeeper的端口还是2181的话就这样写</span><br></pre></td></tr></table></figure>
+<h1 id="五、下篇学习预告"><a href="#五、下篇学习预告" class="headerlink" title="五、下篇学习预告"></a>五、下篇学习预告</h1><p>Zookeeper集群的安装<br>Zookeeper常用命令介绍</p>
+<p>上一篇学习：<a href="/2020/07/17/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BLinux%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E9%85%8D%E7%BD%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E5%8D%A1%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E3%80%81%E9%85%8D%E7%BD%AEJDK%E3%80%81%E4%BB%A5%E5%8F%8Atomcat%E7%9A%84%E5%AE%89%E8%A3%85/" title="学习笔记之Linux学习（三）">学习笔记之Linux学习（三）</a></p>
+<p>下一篇学习：<a href="/2020/07/19/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BZookeeper%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9AZookeeper%E9%9B%86%E7%BE%A4%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E5%90%AF%E5%8A%A8%E5%85%B3%E9%97%AD%E8%84%9A%E6%9C%AC%E7%9A%84%E7%BC%96%E5%86%99%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/" title="学习笔记之Zookeeper学习（二）">学习笔记之Zookeeper学习（二）</a></p>
+<p><strong>如果觉得对自己有帮助，欢迎大家点赞、评论！</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/07/19/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BZookeeper%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AZookeeper%E7%AE%80%E4%BB%8B%E3%80%81%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%E3%80%81%E7%9B%91%E5%90%AC%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6%E3%80%81%E5%8D%95%E6%9C%BA%E7%89%88%E7%9A%84%E5%AE%89%E8%A3%85/" data-id="ckf1vxjfl000jk0uk4ffdb2aa" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" rel="tag">Zookeeper学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/20/Java%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java基础常见面试题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/19/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BZookeeper%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9AZookeeper%E9%9B%86%E7%BE%A4%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E5%90%AF%E5%8A%A8%E5%85%B3%E9%97%AD%E8%84%9A%E6%9C%AC%E7%9A%84%E7%BC%96%E5%86%99%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">学习笔记之Zookeeper学习（二）：Zookeeper集群的安装、启动关闭脚本的编写、常用命令介绍</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%AE%B9%E5%99%A8/">Java容器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%AE%B9%E5%99%A8/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/">TCP/IP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/">Zookeeper</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">个人博客</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/">经验分享</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%AE%B9%E5%99%A8/" rel="tag">Java容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E5%AD%A6%E4%B9%A0/" rel="tag">Linux学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ%E5%AD%A6%E4%B9%A0/" rel="tag">RabbitMQ学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E5%AD%A6%E4%B9%A0/" rel="tag">Redis学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring%E5%AD%A6%E4%B9%A0/" rel="tag">Spring学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP-IP/" rel="tag">TCP/IP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" rel="tag">Zookeeper学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" rel="tag">经验分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">Java基础</a> <a href="/tags/Java%E5%AE%B9%E5%99%A8/" style="font-size: 10px;">Java容器</a> <a href="/tags/Linux%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">Linux学习</a> <a href="/tags/RabbitMQ%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">RabbitMQ学习</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/Redis%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Redis学习</a> <a href="/tags/SpringBoot/" style="font-size: 12.5px;">SpringBoot</a> <a href="/tags/Spring%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Spring学习</a> <a href="/tags/TCP-IP/" style="font-size: 10px;">TCP/IP</a> <a href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">Zookeeper学习</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">个人博客</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">学习笔记</a> <a href="/tags/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" style="font-size: 10px;">经验分享</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.5px;">面试题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/09/09/SpringBoot%E4%B8%AD%E4%BD%BF%E7%94%A8Druid%E6%95%B4%E5%90%88JDBC/">SpringBoot整合JDBC</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/08/%E7%AC%AC%E4%B8%80%E4%B8%AASpringBoot%E7%A8%8B%E5%BA%8F%E4%BB%A5%E5%8F%8A%E5%B0%8F%E5%BD%A9%E8%9B%8B/">第一个SpringBoot程序以及启动图标设置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/16/Redis%E5%9F%BA%E6%9C%AC%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8Redis%E5%AE%9E%E7%8E%B0%E4%B9%90%E8%A7%82%E9%94%81/">Redis基本事务以及实现乐观锁</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/16/Redis%E7%9A%84%E4%BA%94%E7%A7%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/">Redis的数据类型（5种基础，3种特殊）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BRedis%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D%E3%80%81%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F%E3%80%81%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">Redis的常用命令、配置文件介绍、数据持久化方式、集群搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Mr.ou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

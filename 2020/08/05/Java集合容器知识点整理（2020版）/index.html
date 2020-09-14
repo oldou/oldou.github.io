@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Java集合容器知识点整理 | Mr.ou`s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="集合1、什么是集合？集合是一个用于存储数据的容器，任何集合框架都包含：对外的接口、接口的实现、集合运算的算法。  接口：表示集合的抽象数据类型。接口允许我们操作集合时不必关注具体实现，从而达到“多态”。在面向对象编程语言中，接口通常用来形成规范。  实现：集合接口的具体实现，是重用性很高的数据结构。  算法：在一个实现了某个集合框架中的接口的对象身上完成某种有用的计算的方法，例如查找、排序等。这些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合容器知识点整理">
+<meta property="og:url" content="http://example.com/2020/08/05/Java%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86%EF%BC%882020%E7%89%88%EF%BC%89/index.html">
+<meta property="og:site_name" content="Mr.ou&#96;s Blog">
+<meta property="og:description" content="集合1、什么是集合？集合是一个用于存储数据的容器，任何集合框架都包含：对外的接口、接口的实现、集合运算的算法。  接口：表示集合的抽象数据类型。接口允许我们操作集合时不必关注具体实现，从而达到“多态”。在面向对象编程语言中，接口通常用来形成规范。  实现：集合接口的具体实现，是重用性很高的数据结构。  算法：在一个实现了某个集合框架中的接口的对象身上完成某种有用的计算的方法，例如查找、排序等。这些">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200808155437382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200808155501138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200808155733190.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200808160507305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200808160944177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-08-05T12:38:40.000Z">
+<meta property="article:modified_time" content="2020-08-16T15:57:28.244Z">
+<meta property="article:author" content="Mr.ou">
+<meta property="article:tag" content="面试题">
+<meta property="article:tag" content="Java容器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200808155437382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Mr.ou`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Mr.ou`s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java集合容器知识点整理（2020版）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/05/Java%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86%EF%BC%882020%E7%89%88%EF%BC%89/" class="article-date">
+  <time datetime="2020-08-05T12:38:40.000Z" itemprop="datePublished">2020-08-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java%E5%AE%B9%E5%99%A8/">Java容器</a>►<a class="article-category-link" href="/categories/Java%E5%AE%B9%E5%99%A8/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java集合容器知识点整理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><h2 id="1、什么是集合？"><a href="#1、什么是集合？" class="headerlink" title="1、什么是集合？"></a>1、什么是集合？</h2><p>集合是一个用于存储数据的容器，任何集合框架都包含：对外的接口、接口的实现、集合运算的算法。</p>
+<ul>
+<li><p>接口：表示集合的抽象数据类型。接口允许我们操作集合时不必关注具体实现，从而达到“多态”。在面向对象编程语言中，接口通常用来形成规范。</p>
+</li>
+<li><p>实现：集合接口的具体实现，是重用性很高的数据结构。</p>
+</li>
+<li><p>算法：在一个实现了某个集合框架中的接口的对象身上完成某种有用的计算的方法，例如查找、排序等。这些算法通常是多态的，因为相同的方法可以在同一个接口被多个类实现时有不同的表现。事实上，算法是可复用的函数。</p>
+</li>
+</ul>
+<h2 id="2、集合的特点"><a href="#2、集合的特点" class="headerlink" title="2、集合的特点"></a>2、集合的特点</h2><ul>
+<li>对象的封装，对象多了也是需要存储的，而集合用于存储对象；</li>
+<li>对象的个数确定时可以使用数组，但是对象的个数不确定时可以采用集合。因为集合的长度是可变的。</li>
+</ul>
+<h2 id="3、集合和数组的区别以及相互转换"><a href="#3、集合和数组的区别以及相互转换" class="headerlink" title="3、集合和数组的区别以及相互转换"></a>3、集合和数组的区别以及相互转换</h2><p>区别：</p>
+<ul>
+<li>集合的长度是可变的，数组的长度是固定的；</li>
+<li>数组既可以存储基本数据类型，也可以存储引用数据类型，而集合只可以存储引用数据类型；</li>
+<li>数组存储的元素必须是同一数据类型的，而集合存储的对象可以是不同数据类型的。</li>
+</ul>
+<p>转换：</p>
+<ul>
+<li>集合转数组：使用List自带的方法toArray()；</li>
+<li>数组转集合：使用Arrays.asList(array)进行转换；</li>
+</ul>
+<h2 id="4、使用集合框架的好处有哪些？"><a href="#4、使用集合框架的好处有哪些？" class="headerlink" title="4、使用集合框架的好处有哪些？"></a>4、使用集合框架的好处有哪些？</h2><ul>
+<li>容量自增长，集合有扩容机制，当达到一定数量时就会进行扩容；</li>
+<li>提供了高性能的数据结构和算法，使得编码更加轻松，提高了程序速度和质量；</li>
+<li>可以方便的扩展或改写集合，提高代码复用性和可操作性；</li>
+<li>通过使用JDK自带的集合类，可以降低代码维护和学习新API成本。</li>
+</ul>
+<h2 id="5、集合的总体框架介绍"><a href="#5、集合的总体框架介绍" class="headerlink" title="5、集合的总体框架介绍"></a>5、集合的总体框架介绍</h2><p> <img src="https://img-blog.csdnimg.cn/20200808155437382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200808155501138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>Java容器分为Collection和Map两大接口，Collection接口的子接口有Set、List、Queue三种。<br>我们比较常用的是Set、List、Map接口，其中Map接口不是Collection的子接口。</p>
+<h3 id="5-1-各类接口的简介"><a href="#5-1-各类接口的简介" class="headerlink" title="5.1 各类接口的简介"></a>5.1 各类接口的简介</h3><p>（1）Collection集合主要有List和Set两大接口，其次还有Queue接口。</p>
+<ul>
+<li><p>List：它是一个有序（元素存入集合的顺序和取出的顺序一致）容器，元素可以重复，并且可以插入多个null元素，元素都有索引。常用的实现类有：ArrayList、LinkedList和Vector。</p>
+</li>
+<li><p>Set：它是一个无序（存入和去除顺序有可能不一致）容器，不可能存储重复元素，只允许存入一个null元素，但是必须保持元素唯一性。Set接口常用的实现类有HashSet、LinkedHashSet以及TreeSet。</p>
+</li>
+<li><p>Queue：和List、Set时同一级别的，都是继承Collection接口，它是一个队列，特点是先进先出（FIFO），它和堆栈一样，也是一种运算受限的线性表，后面学习的消息中间件中使用到的就是Queue。</p>
+</li>
+</ul>
+<p>（2）Map集合</p>
+<ul>
+<li>Map集合是一个键值对集合，存储键、值之间的映射。Key无序且唯一，Value不要求有序且允许重复。 -  - Map没有继承与Collection接口，它是独立接口从Map集合中检索元素时，只要给出键对象就会返回对一你个的值对象。</li>
+<li>Map接口常用的实现类有：HashMap、TreeMap、Hashtable、LinkedHashMap、ConcurrentHashMap。</li>
+</ul>
+<h3 id="5-2-集合框架的底层数据结构"><a href="#5-2-集合框架的底层数据结构" class="headerlink" title="5.2 集合框架的底层数据结构"></a>5.2 集合框架的底层数据结构</h3><p>（1）List接口</p>
+<ul>
+<li>ArrayList：底层是Object数组</li>
+<li>Vector：底层也是Object数组</li>
+<li>LinkedList：底层使用的是双向循环列表</li>
+</ul>
+<p>（2）Set接口</p>
+<ul>
+<li>HashSet（无序且唯一）：底层是基于HashMap实现的，采用的是HashMap来保存元素；</li>
+<li>LinkedHashSet：它继承于HashSet，其内部是通过LinkedHashMap来实现的。</li>
+<li>TreeSet（有序、唯一）：底层使用红黑树（自平衡的排序二叉树）。</li>
+</ul>
+<p>（3）Map接口</p>
+<ul>
+<li>HashMap：JDK1.8之前采用的是数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）.JDK1.8以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）且数组长度小于64时，首先会进行扩容，否则将链表转化为红黑树，以减少搜索时间；</li>
+<li>LinkedHashMap：LinkedHashMap 继承自 HashMap，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，LinkedHashMap 在上面结构的基础上，增加了一条双向链表，使得上面的结构可以保持键值对的插入顺序。同时通过对链表进行相应的操作，实现了访问顺序相关逻辑；</li>
+<li>HashTable： 数组+链表组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的；</li>
+<li>TreeMap： 红黑树（自平衡的排序二叉树）；</li>
+</ul>
+<h3 id="5-3-集合框架的特点"><a href="#5-3-集合框架的特点" class="headerlink" title="5.3 集合框架的特点"></a>5.3 集合框架的特点</h3><p>（1）List 有序，元素可重复</p>
+<ul>
+<li><p>ArrayList<br>底层数据结构是数组，查询快，增删慢、线程不安全，效率高</p>
+</li>
+<li><p>Vector<br>底层数据结构是数组，查询快，增删慢、线程安全，效率低</p>
+</li>
+<li><p>LinkedList<br>底层数据结构是链表，查询慢，增删快、线程不安全，效率高</p>
+</li>
+</ul>
+<p>（2）Set 无序,唯一</p>
+<ul>
+<li><p>HashSet<br>底层数据结构是哈希表。(无序,唯一)<br>如何来保证元素唯一性?<br>1.依赖两个方法：hashCode()和equals()</p>
+</li>
+<li><p>LinkedHashSet<br>底层数据结构是链表和哈希表。(FIFO插入有序,唯一)<br>1.由链表保证元素有序<br>2.由哈希表保证元素唯一</p>
+</li>
+<li><p>TreeSet<br>底层数据结构是红黑树。(唯一，有序)<br>1.如何保证元素排序的呢?<br>  自然排序<br> 比较器排序<br>2.如何保证元素唯一性的呢?<br> 根据比较的返回值是否是0来决定</p>
+</li>
+</ul>
+<h3 id="5-4-Java中有那些集合是线程安全的呢？"><a href="#5-4-Java中有那些集合是线程安全的呢？" class="headerlink" title="5.4 Java中有那些集合是线程安全的呢？"></a>5.4 Java中有那些集合是线程安全的呢？</h3><p>（1）Vector：比ArrayList多了个同步机制（线程安全）；<br>（2）Hashtable：底层的方法或变量使用sycnhronized关键字修饰；<br>（3）ConcurrentHashMap<br>（4）Statck：堆栈类，先进后出；<br>（5）Enumeration：枚举，相当于迭代器。</p>
+<h3 id="5-5-List、Set、Map三者之间的区别是什么？"><a href="#5-5-List、Set、Map三者之间的区别是什么？" class="headerlink" title="5.5 List、Set、Map三者之间的区别是什么？"></a>5.5 List、Set、Map三者之间的区别是什么？</h3><ul>
+<li>List是一个有序容器、元素可重复，可以插入多个null元素，元素都有索引；</li>
+<li>Set是一个无序容器、元素不重复，只允许插入一个null值，并且必须保证元素唯一性；</li>
+<li>Map是一个键值对集合，里面存储着key-value之间的映射，Key无序且唯一，Value不要求有序且允许重复；<br>List和Set接口是继承于Collection接口，而Map是一个独立的接口，没有继承Collection接口。</li>
+</ul>
+<h1 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a>Collection接口</h1><h2 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a>List接口</h2><h2 id="一、ArrayList"><a href="#一、ArrayList" class="headerlink" title="一、ArrayList"></a>一、ArrayList</h2><h3 id="1、ArrayList的简介"><a href="#1、ArrayList的简介" class="headerlink" title="1、ArrayList的简介"></a>1、ArrayList的简介</h3><ul>
+<li>ArrayList是List接口的实现类，底层使用数组的数据结构进行存储，他其实就是一个动态数组，当我们使用它来进行基本数据类型的存储时，只能存储基本数据类型的包装类，因为它底层实现的是数组对象Object[] elementData，因此不能进行基本数据类型的存储。<br>它有以下几个特点：</li>
+<li>查询效率高、增删效率低、线程不安全。但是使用频率高。    </li>
+</ul>
+<p>（1）为什么它的查找效率高呢？<br>答：因为ArrayList的底层是以数组实现，是一种随机访问模式，ArrayList实现了RandomAccess接口，因此查询的时候很快。</p>
+<p>（2）为什么增删的效率低呢？<br>答：当增加/删除元素的时候，需要做一次数组拷贝的操作，如果元素比较多就比较耗性能。</p>
+<p>（3）应用场景：适合使用在顺序添加、随机访问的场景。</p>
+<h3 id="2、ArrayLisy的默认长度以及扩容机制"><a href="#2、ArrayLisy的默认长度以及扩容机制" class="headerlink" title="2、ArrayLisy的默认长度以及扩容机制"></a>2、ArrayLisy的默认长度以及扩容机制</h3><p>（1）通过看ArrayList的源码可以知道ArrayList的默认长度为10（DEFAULT_CAPACITY = 10），如图源码所示：<br><img src="https://img-blog.csdnimg.cn/20200808155733190.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>它可以通过构造方法初始化的时候指定底层数组的大小，开始的时候默认是空数组，也就是长度为0，只有当我们去调用add方法添加数据时才会分配默认值10。</p>
+<p>（2）然后我们都知道，数组的长度是有限的，当插入元素到一定程度的时候，就会进行扩容，打比方说我们现在有一个长度为10的数组，现在我们要新增一个元素，但是发现已经装不下了，这个时候会进行以下步骤：</p>
+<ul>
+<li>第一步：重新定义一个长度为10+10/2的数组（定义一个原数组容量的1.5倍），也就是新增一个容量为15的数组；</li>
+<li>第二步：将原数组中的数据原封不动的复制到新数组中，相当于对数组进行了拷贝，这个时候再把指向原数组的地址换到新数组。<br>以上两步就是ArrayList的扩容。</li>
+</ul>
+<h3 id="3、ArrayList在JDK1-7和JDK1-8版本初始化的时候有什么区别？"><a href="#3、ArrayList在JDK1-7和JDK1-8版本初始化的时候有什么区别？" class="headerlink" title="3、ArrayList在JDK1.7和JDK1.8版本初始化的时候有什么区别？"></a>3、ArrayList在JDK1.7和JDK1.8版本初始化的时候有什么区别？</h3><p>ArrayList在JDK1.7 之前初始化时会调用this(10)才是真正的容量为10，JDK1.7之后本身就默认走了空数组，只有第一次调用add()方法时容量才会变成10。</p>
+<h3 id="4、ArrayList-int-initialCapacity-会不会初始化数组大小？"><a href="#4、ArrayList-int-initialCapacity-会不会初始化数组大小？" class="headerlink" title="4、ArrayList(int initialCapacity) 会不会初始化数组大小？"></a>4、ArrayList(int initialCapacity) 会不会初始化数组大小？</h3><p>会初始化数组大小，但是List的大小没有变，因为List的大小返回的时size的。</p>
+<h3 id="5、ArrayList常用的方法有哪些？"><a href="#5、ArrayList常用的方法有哪些？" class="headerlink" title="5、ArrayList常用的方法有哪些？"></a>5、ArrayList常用的方法有哪些？</h3><ul>
+<li><p><code>boolean add(E e)</code><br>将指定的元素添加到此列表的尾部。</p>
+</li>
+<li><p><code>void add(int index, E element)</code><br>将指定的元素插入此列表中的指定位置。</p>
+</li>
+<li><p><code>boolean addAll(Collection c)</code><br>按照指定 collection 的迭代器所返回的元素顺序，将该 collection 中的所有元素添加到此列表的尾部。</p>
+</li>
+<li><p><code>boolean addAll(int index, Collection c)</code><br>从指定的位置开始，将指定 collection 中的所有元素插入到此列表中。</p>
+</li>
+<li><p><code>void clear()</code><br>移除此列表中的所有元素。</p>
+</li>
+<li><p><code>Object clone()</code><br>返回此 ArrayList 实例的浅表副本。</p>
+</li>
+<li><p><code>boolean contains(Object o)</code><br>如果此列表中包含指定的元素，则返回 true。</p>
+</li>
+<li><p><code>void ensureCapacity(int minCapacity)</code><br>如有必要，增加此 ArrayList 实例的容量，以确保它至少能够容纳最小容量参数所指定的元素数。</p>
+</li>
+<li><p><code>E get(int index)</code><br>返回此列表中指定位置上的元素。</p>
+</li>
+<li><p><code>int indexOf(Object o)</code><br>返回此列表中首次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。</p>
+</li>
+<li><p><code>boolean isEmpty()</code><br>如果此列表中没有元素，则返回 true</p>
+</li>
+<li><p><code>int lastIndexOf(Object o)</code><br>返回此列表中最后一次出现的指定元素的索引，或如果此列表不包含索引，则返回 -1。</p>
+</li>
+<li><p><code>E remove(int index)</code><br>移除此列表中指定位置上的元素。</p>
+</li>
+<li><p><code>boolean remove(Object o)</code><br>移除此列表中首次出现的指定元素（如果存在）。</p>
+</li>
+<li><p><code>protected void removeRange(int fromIndex, int toIndex)</code><br>移除列表中索引在 fromIndex（包括）和 toIndex（不包括）之间的所有元素。</p>
+</li>
+<li><p><code>E set(int index, E element)</code><br>用指定的元素替代此列表中指定位置上的元素。</p>
+</li>
+<li><p><code>int size()</code><br>返回此列表中的元素数。</p>
+</li>
+<li><p><code>Object[] toArray()</code><br>按适当顺序（从第一个到最后一个元素）返回包含此列表中所有元素的数组。</p>
+</li>
+<li><p><code>T[] toArray(T[] a)</code><br>按适当顺序（从第一个到最后一个元素）返回包含此列表中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型。</p>
+</li>
+<li><p><code>void trimToSize()</code><br>将此 ArrayList 实例的容量调整为列表的当前大小。</p>
+</li>
+</ul>
+<h3 id="6、ArrayList初始化过程源码分析"><a href="#6、ArrayList初始化过程源码分析" class="headerlink" title="6、ArrayList初始化过程源码分析"></a>6、ArrayList初始化过程源码分析</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line">   &#x2F;&#x2F;这里是说明了ArrayList创建时是赋值了一个长度默认为0的数组，同时也是一个Object类型的数组</span><br><span class="line">   private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA &#x3D; &#123;&#125;;</span><br><span class="line">   &#x2F;&#x2F;ArrayList的底层是一个动态数组对象</span><br><span class="line">   transient Object[] elementData;</span><br><span class="line"></span><br><span class="line">   &#x2F;&#x2F;1、无参构造方法</span><br><span class="line">   public ArrayList() &#123;</span><br><span class="line">       &#x2F;&#x2F;这里相当于this.elementData &#x3D; &#123;&#125;;</span><br><span class="line">       this.elementData &#x3D; DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">    private static final Object[] EMPTY_ELEMENTDATA &#x3D; &#123;&#125;;</span><br><span class="line">   &#x2F;&#x2F;2、带参构造方法   initialCapacity表示自己赋值的容量</span><br><span class="line">   public ArrayList(int initialCapacity) &#123;</span><br><span class="line">       if (initialCapacity &gt; 0) &#123;</span><br><span class="line">            &#x2F;&#x2F;如果大于0 那么就创建一个容量为initialCapacity的数组对象</span><br><span class="line">           this.elementData &#x3D; new Object[initialCapacity];</span><br><span class="line">       &#125; else if (initialCapacity &#x3D;&#x3D; 0) &#123; &#x2F;&#x2F;这里是为了保证健壮性</span><br><span class="line">           &#x2F;&#x2F;如果为0，表示没有赋值，就创建一个长度为0的空数组</span><br><span class="line">           this.elementData &#x3D; EMPTY_ELEMENTDATA;</span><br><span class="line">       &#125; else &#123;</span><br><span class="line">           &#x2F;&#x2F;这里也是为了保证程序的健壮性，如果赋值为负数就报异常</span><br><span class="line">           throw new IllegalArgumentException(&quot;Illegal Capacity: &quot;+</span><br><span class="line">                   initialCapacity);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   &#x2F;&#x2F;这个size是ArrayList的大小</span><br><span class="line">        private int size;</span><br><span class="line">   &#x2F;&#x2F;3、添加方法 add(Object obj)</span><br><span class="line">    public boolean add(E e) &#123;</span><br><span class="line">       &#x2F;&#x2F;检测容量是否够用，如果不够用就进行扩容，假设为空 0</span><br><span class="line">       ensureCapacityInternal(size + 1); &#x2F;&#x2F;0+1</span><br><span class="line">       &#x2F;&#x2F;添加元素  elementData[size] &#x3D; e;  size++;</span><br><span class="line">       elementData[size++] &#x3D; e;</span><br><span class="line">       return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   &#x2F;&#x2F;初始容量10</span><br><span class="line">   private static final int DEFAULT_CAPACITY &#x3D; 10;</span><br><span class="line"></span><br><span class="line">   &#x2F;&#x2F;4、检测当前数组容量是否够用</span><br><span class="line">    &#x2F;&#x2F;minCapacity表示最小容量 0+1</span><br><span class="line">   private void ensureCapacityInternal(int minCapacity) &#123;</span><br><span class="line">       &#x2F;&#x2F;判断数组的是否为空   第一次调用时  elementData &#x3D;&#x3D; &#123;&#125;</span><br><span class="line">       if (elementData &#x3D;&#x3D; DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</span><br><span class="line">            &#x2F;&#x2F;如果为空就就行比较，然后取最大值 为空的话最大值为10</span><br><span class="line">            minCapacity &#x3D; Math.max(DEFAULT_CAPACITY, minCapacity);&#x2F;&#x2F;max(10,1);</span><br><span class="line">       &#125;</span><br><span class="line">       &#x2F;&#x2F;计算出来之后就调用这个方法  minCapacity为10</span><br><span class="line">       ensureExplicitCapacity(minCapacity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;4.1、传入这个方法的minCapacity为10</span><br><span class="line">    private void ensureExplicitCapacity(int minCapacity) &#123; &#x2F;&#x2F;10</span><br><span class="line">        modCount++;</span><br><span class="line">       &#x2F;&#x2F; 进行判断，发现现在数组当前同理不满足所需最小容量</span><br><span class="line">        if (minCapacity - elementData.length &gt; 0) &#x2F;&#x2F;10 - 0 &gt; 0</span><br><span class="line">           &#x2F;&#x2F;进行扩容</span><br><span class="line">           grow(minCapacity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   &#x2F;&#x2F;5、扩容</span><br><span class="line">   private void grow(int minCapacity) &#123;  &#x2F;&#x2F;当期数组所需最小容量10</span><br><span class="line">        int oldCapacity &#x3D; elementData.length; &#x2F;&#x2F;当前数组长度  0</span><br><span class="line">        int newCapacity &#x3D; oldCapacity + (oldCapacity &gt;&gt; 1); &#x2F;&#x2F;计算新的数组容量 这里相当于扩容0.5倍</span><br><span class="line">        if (newCapacity - minCapacity &lt; 0) &#x2F;&#x2F; 0-10&lt;0</span><br><span class="line">            newCapacity &#x3D; minCapacity; &#x2F;&#x2F;将容量进行赋值 newCapacity&#x3D;10</span><br><span class="line">        &#x2F;&#x2F;以下判断是为了保持程序的健壮性</span><br><span class="line">        if (newCapacity - MAX_ARRAY_SIZE &gt; 0)</span><br><span class="line">           newCapacity &#x3D; hugeCapacity(minCapacity);</span><br><span class="line">        &#x2F;&#x2F;对数组进行拷贝 并且新数组elementData的长度为10</span><br><span class="line">        elementData &#x3D; Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p> <strong>总结</strong>：以上为第一次调用add方法时ArrayList底层所做的事情，下面详细总结一下：<br> 当我们新创建一个ArrayList，没有赋初值，那么底层就调用无参构造方法，去创建一个Object数组对象，这个数组对象的默认长度为0，当我们第一次调用add方法去添加元素的时候，首先会进行一次容量的检测<code>ensureCapacityInternal(size + 1);</code>检测容量不够用的话就会进行扩容，将容量变成默认长度10(<code>private static final int DEFAULT_CAPACITY = 10;</code>)，<br>这也就是为什么我们说的ArrayList的默认长度为10，然后扩容时是扩容为原数组的1.5倍，如果当前长度为10，需要扩容时容量就会计算为<code>15(oldCapacity + (oldCapacity &gt;&gt; 1);)</code></p>
+<h3 id="7、ArrayList部分方法源码分析"><a href="#7、ArrayList部分方法源码分析" class="headerlink" title="7、ArrayList部分方法源码分析"></a>7、ArrayList部分方法源码分析</h3> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"> &#x2F;** 方法的源码分析</span><br><span class="line">    （1）add(int index,Object obj)方法  在指定索引的位置上添加元素</span><br><span class="line">public void add(int index, E element) &#123; &#x2F;&#x2F;索引和元素</span><br><span class="line"> &#x2F;&#x2F;检测索引是否正确</span><br><span class="line">    rangeCheckForAdd(index);</span><br><span class="line"> &#x2F;&#x2F;检测容量是否够用</span><br><span class="line">    ensureCapacityInternal(size + 1);  &#x2F;&#x2F; Increments modCount!!</span><br><span class="line"> &#x2F;&#x2F;数组的拷贝           原数组   原数组开始位置  新数组  新数组开始位置  拷贝元素的个数</span><br><span class="line">    System.arraycopy(elementData, index, elementData, index + 1,size - index);</span><br><span class="line">    elementData[index] &#x3D; element; &#x2F;&#x2F;将元素添加到索引为index的位置上</span><br><span class="line">    size++; &#x2F;&#x2F;元素的个数+1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    （2）get(int index)根据索引获取元素对象</span><br><span class="line">public E get(int index) &#123;</span><br><span class="line">    rangeCheck(index); &#x2F;&#x2F;检测索引是否正确</span><br><span class="line"></span><br><span class="line">    return elementData(index); &#x2F;&#x2F;调用elementData方法，操作数组根据索引取出元素对象</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    （3）set(int index,E element) 根据索引，设置元素对象的值</span><br><span class="line">public E set(int index, E element) &#123;</span><br><span class="line">    rangeCheck(index);</span><br><span class="line">&#x2F;&#x2F;根据索引获取数组中的元素</span><br><span class="line">    E oldValue &#x3D; elementData(index);</span><br><span class="line"> &#x2F;&#x2F;将新的元素设置到索引为index的位置上</span><br><span class="line">    elementData[index] &#x3D; element;</span><br><span class="line">    return oldValue; &#x2F;&#x2F;返回被替换的元素</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    （4）remove(int index)  根据索引删除元素</span><br><span class="line">public E remove(int index) &#123;</span><br><span class="line">    rangeCheck(index);</span><br><span class="line"></span><br><span class="line">    modCount++;</span><br><span class="line">    E oldValue &#x3D; elementData(index);&#x2F;&#x2F;根据所以取出数组中的元素</span><br><span class="line"> &#x2F;&#x2F;计算拷贝的元素个数</span><br><span class="line">    int numMoved &#x3D; size - index - 1;</span><br><span class="line"></span><br><span class="line">    if (numMoved &gt; 0)</span><br><span class="line"> &#x2F;&#x2F;数组的拷贝</span><br><span class="line">        System.arraycopy(elementData, index+1, elementData, index,</span><br><span class="line">                numMoved);</span><br><span class="line"> &#x2F;&#x2F;将最后一个位置设置为null</span><br><span class="line">    elementData[--size] &#x3D; null; &#x2F;&#x2F; clear to let GC do its work</span><br><span class="line">&#x2F;&#x2F;返回被删除的元素</span><br><span class="line">    return oldValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> 其他的方法都与以上类似，直接去看源码即可</span><br><span class="line"> *&#x2F;</span><br></pre></td></tr></table></figure>
+<h2 id="二、LinkedList"><a href="#二、LinkedList" class="headerlink" title="二、LinkedList"></a>二、LinkedList</h2><h3 id="1、LinkedList的简介"><a href="#1、LinkedList的简介" class="headerlink" title="1、LinkedList的简介"></a>1、LinkedList的简介</h3><p>LinkedList类继承了AbstractSequentialList抽象类，同时继承了List、Deque、Clonable、Serializable接口，它可以被当做堆栈、队列或者双端队列进行操作。<br>LinkedList底层采用的是双向链表的数据结构进行存储，节点用静态内部类Node，它增删元素效率比较高，但是结构比较复杂。<br>源码如下：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> private static class Node &#123;</span><br><span class="line">    E item;</span><br><span class="line">    Nodenext; &#x2F;&#x2F;后继节点</span><br><span class="line">    Nodeprev; &#x2F;&#x2F;前驱节点</span><br><span class="line">    Node(Node prev, E element, Node next) &#123;</span><br><span class="line">        this.item &#x3D; element;</span><br><span class="line">        this.next &#x3D; next;</span><br><span class="line">        this.prev &#x3D; prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>添加以下代码时的结构图：<br><img src="https://img-blog.csdnimg.cn/20200808160507305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="2、LinkedList和ArrayList之间的区别是什么？"><a href="#2、LinkedList和ArrayList之间的区别是什么？" class="headerlink" title="2、LinkedList和ArrayList之间的区别是什么？"></a>2、LinkedList和ArrayList之间的区别是什么？</h3><ul>
+<li>数据结构：ArrayList底层采用动态数组的数据结构，LinkedList底层采用双向链表的数据结构；</li>
+<li>随机访问效率：ArrayList的随机访问效率比LinkedList要高，因为LinkedList是线性的数据存储方式，查询时需要移动指针从前往后依次查找；</li>
+<li>增删效率：在非首尾的增删操作，LinkedList的效率要比ArrayList高，因为ArrayList的增删操作会影响数组内其他元素的下标。</li>
+<li>内存空间：LinkedList要比ArrayList更占内存，因为LinkedList的节点除了存储数据，还存储了两个引用，一个指向前一个元素，另一个指向后一个元素。</li>
+<li>两者都是线程不安全的。</li>
+</ul>
+<p>双向链表也叫双链表，它的每个数据节点中都有两个指针，分别指向直接前驱和直接后驱。因此从双向链表中任何一个节点开始都可以很方便的访问它的前驱节点和后驱节点。</p>
+<h2 id="三、Vector"><a href="#三、Vector" class="headerlink" title="三、Vector"></a>三、Vector</h2><p>Vector的底层数据结构和ArrayList一样是动态数组，区别在于Vector是线程安全的，它继承了AbstractList类。<br><strong>Vector的默认长度为10，初始化未设置初始值时，会调用无参构造方法，然后使用this(10)，直接将容量赋值为10，然后当容量不足时会进行扩容，扩容后容量为原来的两倍。10–&gt;20</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> public Vector() &#123;</span><br><span class="line">    this(10);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3、ArrayList和Vector的区别"><a href="#3、ArrayList和Vector的区别" class="headerlink" title="3、ArrayList和Vector的区别"></a>3、ArrayList和Vector的区别</h3><p>相同点：两者都实现了List接口，都是有序集合，底层数据结构相同，并且方法类似。<br>不同点：</p>
+<ul>
+<li>线程安全：Vector使用了synchronized关键字来实现线程同步，是线程安全的，而ArrayList是非线程安全的；</li>
+<li>性能：ArrayList在性能方面要由于Vector；</li>
+<li>扩容：ArrayList和Vector都会根据实际需求动态的进行扩容，Vector每次扩容会增加1倍，而ArrayList增加0.5倍。</li>
+<li>容量初始化方式：ArrayList在创建时是一个空数组，在第一次调用add方法时才初始化容量为10，而LinkedList在创建对象的时候就直接初始化容量为10。</li>
+<li>版本不一样，Vector时JDK1.0的，ArrayList时JDK1.2的版本。</li>
+</ul>
+<h3 id="4、ArrayList、LinkedList、Vector三者之间的对比"><a href="#4、ArrayList、LinkedList、Vector三者之间的对比" class="headerlink" title="4、ArrayList、LinkedList、Vector三者之间的对比"></a>4、ArrayList、LinkedList、Vector三者之间的对比</h3><ul>
+<li>Vector是线程安全的容器，但是性能别ArrayList差；</li>
+<li>LinkedList的插入数据的速度较快；</li>
+<li>Vector和ArrayList的底层都是使用动态数组实现的。</li>
+</ul>
+<h2 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a>Set接口</h2><h3 id="1、HashSet的工作原理"><a href="#1、HashSet的工作原理" class="headerlink" title="1、HashSet的工作原理"></a>1、HashSet的工作原理</h3><p>HashSet是基于HashMap实现的，底层数据结构是哈希表，主结构数组，HashSet的值存放在HashMap的key上，HashMap的Value统一为PRESENT，因此HashSet是一个无序集合，且里面的元素唯一，允许插入null元素，但不允许有重复的值。HashSet基本上都是直接调用底层的HashMap的相关方法来实现的。</p>
+<h3 id="2、HashSet是如何保证数据不重复的？"><a href="#2、HashSet是如何保证数据不重复的？" class="headerlink" title="2、HashSet是如何保证数据不重复的？"></a>2、HashSet是如何保证数据不重复的？</h3><p>当调用HashSet中的add()方法添加元素时，首先会判断元素是否存在，而判断元素是否存在不仅仅要比较hash值同时还需要结合equals()方法进行比较。当调用HashSet中的add方法时会间接的使用HashMap中的put方法，我们都知道HashMap的键是唯一的，不允许重复，而从HashSet的源码可以知道添加的元素就是作为HashMap的Key，并且当HashMap中的Key/Value相同时新的Value会替换掉就的Value，HashMap比较Key是否相等时先是比较HashCode然后在比较equals，因此保证了数据不重复。</p>
+<p>以下为HashSet的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> private static final Object PRESENT &#x3D; new Object();</span><br><span class="line">private transient HashMap&lt;E,Object&gt; map;</span><br><span class="line"></span><br><span class="line">public HashSet() &#123;</span><br><span class="line">    map &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean add(E e) &#123;</span><br><span class="line">    &#x2F;&#x2F; 调用HashMap的put方法,PRESENT是一个至始至终都相同的虚值</span><br><span class="line">    return map.put(e, PRESENT)&#x3D;&#x3D;null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>附重点：</strong><br>（1）hashcode()和equals()的一些注意点</p>
+<ul>
+<li>如果两个对象相等，那么它们的hashcode一定相等，且对两个对象的equals方法返回为true；</li>
+<li>如果两个对象有相同的hashcode，但它们不一定是相等的，equals方法返回不一定为true；</li>
+<li>当equals方法被覆盖（重写）时，hashcode方法也异地你个要被覆盖（重写）；</li>
+<li>hashCode方法的默认行为是对堆上的对象产生独特值，如果没重写hashCode，则该class的两个对象无论如何都不会相等，即使这两个对象指向相同的数据。</li>
+</ul>
+<p>（2）==和equlas的对比</p>
+<ul>
+<li>==判断两个变量或者实例是不是指向同一个内存空间，而equals方法是比较两个变量或者实例所指向的呢内存空间的值是不是相同的；</li>
+<li>==是对内存地址进行比较，而equals方法是对字符串的内容进行比较；</li>
+<li>==比较的是引用是否相同，而equals方法比较的是值是否相同。</li>
+</ul>
+<h3 id="3、HashSet的一些常用方法介绍"><a href="#3、HashSet的一些常用方法介绍" class="headerlink" title="3、HashSet的一些常用方法介绍"></a>3、HashSet的一些常用方法介绍</h3><ul>
+<li>add 添加一个元素</li>
+<li>clear 请发出整个HashSet中的元素</li>
+<li>contains 判断集合中是否包含某个元素</li>
+<li>remove 删除指定的元素</li>
+<li>size 返回集合的大小</li>
+<li>isEmpty 判断是否为空</li>
+</ul>
+<h3 id="4、HashSet和HashMap的区别"><a href="#4、HashSet和HashMap的区别" class="headerlink" title="4、HashSet和HashMap的区别"></a>4、HashSet和HashMap的区别</h3><ul>
+<li>实现接口：HashMap实现了Map接口，而HashSet实现的是Set接口；</li>
+<li>存储对比：HashMap存储的是键值对，而HashSet仅仅存储对象；</li>
+<li>添加元素方式：HashMap调用put方法向Map中添加元素，而HashSet调用的是add方法向Set中添加元素；</li>
+<li>效率：HashMap相对于HashSet来说较快，因为HashMap是使用唯一的键获取对象。</li>
+<li>获取Hashcode的方式：HashMap使用的是Key计算hashcode，而HashSet是通过成员对象来计算hashcode，对于两个对象的hashcode可能相同，所以使用equals方法来判断对象是否相等。</li>
+</ul>
+<h3 id="5、HashSet的源码分析"><a href="#5、HashSet的源码分析" class="headerlink" title="5、HashSet的源码分析"></a>5、HashSet的源码分析</h3><p>HashSet的源码只有短短的300行，现在我们来看一下HashSet的构造方法和成员变量，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; HashSet 真实的存储元素结构</span><br><span class="line">private transient HashMap&lt;E,Object&gt; map;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 作为各个存储在 HashMap 元素的键值对中的 Value</span><br><span class="line">private static final Object PRESENT &#x3D; new Object();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;空参数构造方法 调用 HashMap 的空构造参数  </span><br><span class="line">&#x2F;&#x2F;初始化了 HashMap 中的加载因子 loadFactor &#x3D; 0.75f</span><br><span class="line">public HashSet() &#123;</span><br><span class="line">    map &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;指定期望容量的构造方法</span><br><span class="line">public HashSet(int initialCapacity) &#123;</span><br><span class="line">    map &#x3D; new HashMap&lt;&gt;(initialCapacity);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;指定期望容量和加载因子</span><br><span class="line">public HashSet(int initialCapacity, float loadFactor) &#123;</span><br><span class="line">    map &#x3D; new HashMap&lt;&gt;(initialCapacity, loadFactor);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;使用指定的集合填充Set</span><br><span class="line">public HashSet(Collection&lt;? extends E&gt; c) &#123;</span><br><span class="line">    &#x2F;&#x2F;调用  new HashMap&lt;&gt;(initialCapacity) 其中初始期望容量为 16 和 c 容量 &#x2F; 默认 load factor 后 + 1的较大值</span><br><span class="line">    map &#x3D; new HashMap&lt;&gt;(Math.max((int) (c.size()&#x2F;.75f) + 1, 16));</span><br><span class="line">    addAll(c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 该方法为 default 访问权限，不允许使用者直接调用，目的是为了初始化 LinkedHashSet 时使用</span><br><span class="line">HashSet(int initialCapacity, float loadFactor, boolean dummy) &#123;</span><br><span class="line">    map &#x3D; new LinkedHashMap&lt;&gt;(initialCapacity, loadFactor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过HashSet的构造参数我们可以看出每个构造方法都调用了对应的HashMap的构造方法，因此我们可以知道<strong>HashSet的默认初始化容量为16（源码中是1&lt;&lt;4），负载因子默认为0.75f，和HashMap的一样。</strong></li>
+<li>我们都知道Set集合是不允许存储重复的元素的，又由构造参数得出HashSet的底层存储结构为HashMap，那么从源码中可以得知，<strong>实现这不可重复的属性是由HashMap中存储键值对的Key来实现</strong>。</li>
+</ul>
+<h3 id="6、LinkedHashSet的简介"><a href="#6、LinkedHashSet的简介" class="headerlink" title="6、LinkedHashSet的简介"></a>6、LinkedHashSet的简介</h3><p>LinkedHashSet继承于HashSet，底层采用的链表+哈希表的数据结构，FIFO插入元素，是一个有序容器，且元素唯一，可以容纳null元素。</p>
+<h3 id="7、LinkedHashSet源码分析"><a href="#7、LinkedHashSet源码分析" class="headerlink" title="7、LinkedHashSet源码分析"></a>7、LinkedHashSet源码分析</h3><p>上面HashSet源码的构造方法中有一个default权限的构造方法，该构造方法内部调用的是LinkedHashMap的构造方法，而LinkedHashMap比HashMap多了一个维护双向链表添加元素时保持的顺序。<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">     &#x2F;&#x2F; dummy 参数没有作用这里可以忽略</span><br><span class="line">    HashSet(int initialCapacity, float loadFactor, boolean dummy) &#123;</span><br><span class="line">        map &#x3D; new LinkedHashMap&lt;&gt;(initialCapacity, loadFactor);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;调用 LinkedHashMap 的构造方法，该方法初始化了初始起始容量，以及加载因子，</span><br><span class="line">&#x2F;&#x2F;accessOrder &#x3D; false 即迭代顺序不等于访问顺序</span><br><span class="line">    public LinkedHashMap(int initialCapacity, float loadFactor) &#123;</span><br><span class="line">        super(initialCapacity, loadFactor);</span><br><span class="line">        accessOrder &#x3D; false;</span><br><span class="line">    &#125;</span><br><span class="line">LinkedHashSet的构造方法一共有四个，统一调用了父类HashSet的 HashSet(int initialCapacity, float loadFactor, boolean dummy)构造方法。</span><br><span class="line"> &#x2F;&#x2F;初始化 LinkedHashMap 的初始容量为诶 16 加载因子为 0.75f</span><br><span class="line">public LinkedHashSet() &#123;</span><br><span class="line">    super(16, .75f, true);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;初始化 LinkedHashMap 的初始容量为 Math.max(2*c.size(), 11) 加载因子为 0.75f </span><br><span class="line">public LinkedHashSet(Collection&lt;? extends E&gt; c) &#123;</span><br><span class="line">    super(Math.max(2*c.size(), 11), .75f, true);</span><br><span class="line">    addAll(c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;初始化 LinkedHashMap 的初始容量为参数指定值 加载因子为 0.75f </span><br><span class="line">public LinkedHashSet(int initialCapacity) &#123;</span><br><span class="line">    super(initialCapacity, .75f, true);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;初始化 LinkedHashMap 的初始容量,加载因子为参数指定值 </span><br><span class="line">public LinkedHashSet(int initialCapacity, float loadFactor) &#123;</span><br><span class="line">    super(initialCapacity, loadFactor, true);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>以上就是LinkedHashSet的源码，从源码中就可以知道它的实现完全依赖于LinkedHashMap内部的数据结构。</p>
+<h3 id="7、TreeSet的简介"><a href="#7、TreeSet的简介" class="headerlink" title="7、TreeSet的简介"></a>7、TreeSet的简介</h3><p>TreeSet是一个key唯一，有序（升序）容器，底层采用的是红黑树的数据结构，它是基于TreeMap实现的，不能存储null元素，同时也不支持同步，而且TreeMap中的key实际上就是一个TreeSet。使用TreeSet要求使用内部比较器或者外部比较器。</p>
+<h2 id="四、Collections工具类的部分方法介绍"><a href="#四、Collections工具类的部分方法介绍" class="headerlink" title="四、Collections工具类的部分方法介绍"></a>四、Collections工具类的部分方法介绍</h2><ul>
+<li>Collections.sort(list)：如果list集合是字符串就会按照英文字母升序排序，如果是Integer类型就会按照数字大小排序；</li>
+<li>Collections.addAll(list,elements)：一次性添加多个元素；</li>
+<li>Collections.binarySearch(list,element)：二分查找，返回元素所在索引，element表示要查找的元素，使用前需要进行排序</li>
+<li>Collections.copy(list1,list2)：将list1中的元素全部拷贝到list2集合，前提是list2集合的长度要大于或等于list1的长度，如果定义了泛型，那么集合的类型就需要一致</li>
+<li>Collections.fill(list,element)：将element元素对list集合进行元素的填充，填充之后全部的元素都是element</li>
+<li>Collections.max(list)：返回list集合中最大的元素</li>
+<li>Collections.min(list)：返回list集合中最小的元素</li>
+<li>Collections.reverse(list)：将list中的元素进行逆序排序</li>
+<li>Collections.synchronizedList(list)：将集合转换成线程同步</li>
+</ul>
+<h2 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a>Map接口</h2><h3 id="1、HashMap的简介"><a href="#1、HashMap的简介" class="headerlink" title="1、HashMap的简介"></a>1、HashMap的简介</h3><p>HashMap是我们常见的数据结构，在JDK1.7之前它是由数组+链表组成的数据结构，数组中每个地方都存储了Key-Value这样的实例，它的数据结构是一个Entry节点，在JDK1.8之后，HashMap的结构就变成了数组+链表+红黑树这么一个数据结构，把原来的Entry节点变成了Node节点，当链表长度大于8且数组长度大于64时会自动转化为红黑树。<br>（1）当我们使用put方法往HashMap中加入元素的时候，HashMap会利用Hash算法将Key的HashCode重新hash，并计算出当前对象元素在数组中的下标，然后将其存储进去；<br>（2）在存储时如果出现hash值相同的Key，这个时候就会使用equals()方法去比较它们的Key是否相同，如果Key相同，那么就进行值的覆盖，如果Key不同，那么就会将当前的Key-Value放入到链表当中。<br>（3）然后说到插入链表的方式，在JDK1.7之前采用的是头插法，意思就是新来的值会取代原有的值，原来的值就被顺推到链表中去；在JDK1.8之后采用的是尾插法，意思就是新来的值会往后添加到链表中去，当链表长度大于8且数组长度大于64时会自动转化为红黑树。<br> <img src="https://img-blog.csdnimg.cn/20200808160944177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzI0NjIxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="2、HashMap的扩容机制"><a href="#2、HashMap的扩容机制" class="headerlink" title="2、HashMap的扩容机制"></a>2、HashMap的扩容机制</h3><p>HashMap的底层是使用数组进行存储的，我们都知道数组的容量是有限的，数据的多次插入，到达一定数量之后就会进行扩容，也就是resize，那什么时候resize呢？首先得有两个因素：Capacity（HashMap当前的长度，默认初始容量为16）和LoadFactor（负载因子，0.75f），要怎么理解呢？就比如说当前的数组大小为100，当你存进第76个元素的时候，判断发现需要进行resize了，也就是需要进行扩容了，HashMap的扩容不是简单扩大点容量就行了，它分为以下两步：<br>第一步：先去创建一个新的Entry空数组，长度为原来数组的两倍；<br>第二步：进行rehash，遍历原来的Entry数组，把所有的Entry重新Hash到新数组中；<br>整个过程就是HashMap的扩容。</p>
+<h3 id="3、聊一聊JDK1-7之前的头插法和JDK1-8之后的尾插法？"><a href="#3、聊一聊JDK1-7之前的头插法和JDK1-8之后的尾插法？" class="headerlink" title="3、聊一聊JDK1.7之前的头插法和JDK1.8之后的尾插法？"></a>3、聊一聊JDK1.7之前的头插法和JDK1.8之后的尾插法？</h3><ul>
+<li>JDK1.7之前使用的是头插法，就是在往链表中插入元素的时候，新来的值会取代原有的值，原有的值就会顺推到链表中去；<br>缺点：不好的地方在于头插法在数组进行扩容的时候，原有链表中的顺序有所改变，扩容之后重新Hash，可能会导致扩容转移后的前后链表顺序倒置，在转移的过程中修改了原有链表中的节点引用关系，这样的话在多线程操作下就会造成死循环，然后当我们使用get去取值的时候就会进入死循环。</li>
+<li>JDK1.8之后，插入数据的方式就变成了尾插入，使用尾插入在相同的情况下会将元素往后添加，这样就不会出现以上的情况，在扩容时会保持链表元素原有的顺序，就不会出现链表成环的问题。</li>
+</ul>
+<h3 id="4、JDK1-7是头插法，JDK1-8是尾插法，那头插法的时候，它会有死循环，这是线程不安全的原因之一吗？-那JDK1-8之后它的线程就是安全的吗？"><a href="#4、JDK1-7是头插法，JDK1-8是尾插法，那头插法的时候，它会有死循环，这是线程不安全的原因之一吗？-那JDK1-8之后它的线程就是安全的吗？" class="headerlink" title="4、JDK1.7是头插法，JDK1.8是尾插法，那头插法的时候，它会有死循环，这是线程不安全的原因之一吗？ 那JDK1.8之后它的线程就是安全的吗？"></a>4、JDK1.7是头插法，JDK1.8是尾插法，那头插法的时候，它会有死循环，这是线程不安全的原因之一吗？ 那JDK1.8之后它的线程就是安全的吗？</h3><p>不是的，那也不是线程安全的，因为1.8采用的是尾插法，但是没有改变它原来就是数据插入这么一个顺序，所以在这不会出现一个链表循环的这么一个过程。</p>
+<h3 id="5、HashMap的线程不安全，在日常开发中，你是怎么去保证他线程安全的？"><a href="#5、HashMap的线程不安全，在日常开发中，你是怎么去保证他线程安全的？" class="headerlink" title="5、HashMap的线程不安全，在日常开发中，你是怎么去保证他线程安全的？"></a>5、HashMap的线程不安全，在日常开发中，你是怎么去保证他线程安全的？</h3><p>一般可以使用想ConcurrentHashMap这种线程安全的一个集合容器。</p>
+<h3 id="6、HashMap是如何解决哈希冲突的？"><a href="#6、HashMap是如何解决哈希冲突的？" class="headerlink" title="6、HashMap是如何解决哈希冲突的？"></a>6、HashMap是如何解决哈希冲突的？</h3><h3 id="7、为什么String和包装类适合当HashMap中的Key？"><a href="#7、为什么String和包装类适合当HashMap中的Key？" class="headerlink" title="7、为什么String和包装类适合当HashMap中的Key？"></a>7、为什么String和包装类适合当HashMap中的Key？</h3><ul>
+<li>String和包装类的特性能够保证Hash值的不可更改性和计算准确性，能够有效的减少哈希碰撞的几率；</li>
+<li>两者都是被final关键字修饰，即不变性，保证了Key不可被轻易更改，这样就不会有hash不同的情况出现；</li>
+<li>两者内部都重写了equals方法和hashCode方法，符合HashMap的规范；</li>
+</ul>
+<h3 id="8、如果要使用对象作为HashMap中的Key，应当如何处理？"><a href="#8、如果要使用对象作为HashMap中的Key，应当如何处理？" class="headerlink" title="8、如果要使用对象作为HashMap中的Key，应当如何处理？"></a>8、如果要使用对象作为HashMap中的Key，应当如何处理？</h3><p>如果使用对象作为Key，那么这个对象就需要重写equals方法和hashCode方法，原因如下：</p>
+<ul>
+<li>重写equals方法是因为需要计算存储数据的存储位置；</li>
+<li>重写hashCode方法是为了保证Key在哈希表中的唯一性。</li>
+</ul>
+<h3 id="9、HashMap的默认初始化长度是16，为什么是16而不是8，32呢？"><a href="#9、HashMap的默认初始化长度是16，为什么是16而不是8，32呢？" class="headerlink" title="9、HashMap的默认初始化长度是16，为什么是16而不是8，32呢？"></a>9、HashMap的默认初始化长度是16，为什么是16而不是8，32呢？</h3><p>源码中写的值是1&lt;&lt;4，这是由于位运算性能好，直接操作内存而不需要进行进制转换，要知道计算机可是以二进制的形式做数据存储的，至于为什么是16的话，我们在创就创建HashMap的时候，阿里巴巴规范插件会提醒我们最好赋初值，而且最好是2的次幂，这样是为了位运算的方便，位运算比算数计算的效率高多了，之所以选16是为了服务将Key映射到index的算法，通过Key的HashCode值去做位运算，Hash算法的结果是均匀的，主要还是为了实现均匀分布。</p>
+<h3 id="10、那线程安全的，还有像HashTable啊，或者说我给他加Synchronized，或者Lock，或者用Collection-Synchronized都对他进行一个同步的操作，为什么你选择了ConcurrentHashMap？"><a href="#10、那线程安全的，还有像HashTable啊，或者说我给他加Synchronized，或者Lock，或者用Collection-Synchronized都对他进行一个同步的操作，为什么你选择了ConcurrentHashMap？" class="headerlink" title="10、那线程安全的，还有像HashTable啊，或者说我给他加Synchronized，或者Lock，或者用Collection.Synchronized都对他进行一个同步的操作，为什么你选择了ConcurrentHashMap？"></a>10、那线程安全的，还有像HashTable啊，或者说我给他加Synchronized，或者Lock，或者用Collection.Synchronized都对他进行一个同步的操作，为什么你选择了ConcurrentHashMap？</h3><p>HashTable虽然是线程安全的，但是其底层方法基本上都是使用了synchronized关键字修饰，效率低；<br>而ConcurrentHashMap它的并发度更高，并且它的数据结构在JDK1.8之后和HashMap一样变成了数组+链表+红黑树，它只会锁住我们目前获取到的那个Entry所在的那个节点的值，并且在上锁的时候它使用了CAS + Synchronized，再加上JDK1.6之后对Sychronized进行了一个优化和升级的过程，所以它的效率是更高的，也就是支持的并法度是更高的。</p>
+<h3 id="11、简单介绍一下锁升级的过程。"><a href="#11、简单介绍一下锁升级的过程。" class="headerlink" title="11、简单介绍一下锁升级的过程。"></a>11、简单介绍一下锁升级的过程。</h3><p>在锁对象的对象头里面有一个threadid字段，第一次访问的时候这个字段是为空的，然后JVM让其持有偏向锁，并且将这个字段设置为其线程id，再次进入的时候会先判断threadid是否与其线程id一致，如果一致就可以直接使用该对象，如果不一致则将偏向锁升级为轻量级锁，通过自旋一定次数来获取锁，执行一定次数之后如果还没有正常获取到想要使用的对象，此时就将轻量级锁升级为重量级锁，此过程就构成了Synchronized锁的升级。</p>
+<p>锁的升级的目的：锁升级是为了减低了锁带来的性能消耗。在 Java 6 之后优化 synchronized 的实现方式，使用了偏向锁升级为轻量级锁再升级到重量级锁的方式，从而减低了锁带来的性能消耗。</p>
+<h3 id="12、HashMap和Hashtable的区别是什么？"><a href="#12、HashMap和Hashtable的区别是什么？" class="headerlink" title="12、HashMap和Hashtable的区别是什么？"></a>12、HashMap和Hashtable的区别是什么？</h3><ul>
+<li>线程安全：HashMap是非线程安全的，Hashtable是线程安全的，因为Hashtable的底层使用了synchronized关键字修饰；</li>
+<li>效率：由于Hashtable的线程安全底层加了synchronized，所以HashMap的效率要比Hashtable高。</li>
+<li>初始化容量以及扩容大小：HashMap的初始化容量为16，每次扩容时，容量会变成原来的2倍，而Hashtable的初始化容量为11，每次扩容都变为原来的2n+1。</li>
+<li>底层数据结构：HashMap当链表长度大于阈值8的时候就会将链表转化为红黑树，而Hashtable没有这个机制。</li>
+<li>是否允许null值：HashMap允许键和值为null，但是只允许一个null的Key，而Hashtable不允许非null的键和值存在。      </li>
+<li>实现方式不一样：Hashtable继承了Dictionary类(JDK1.0)，而HashMap继承的是AbstractMap类；</li>
+<li>迭代器不同：HashMap中的迭代器是fail-fast(快速识别机制)，而Hashtable不是。</li>
+</ul>
+<h3 id="13、怎么决定是使用HashMap还是TreeMap？"><a href="#13、怎么决定是使用HashMap还是TreeMap？" class="headerlink" title="13、怎么决定是使用HashMap还是TreeMap？"></a>13、怎么决定是使用HashMap还是TreeMap？</h3><ul>
+<li>当对数据进行插入、删除、定位查找等操作的时候，可以优先考虑使用HashMap；</li>
+<li>而如果是要对一个有序的Key集合进行遍历的时候，这个时候使用TreeMap就更好一些。</li>
+</ul>
+<h3 id="14、Hashmap中的链表大小超过八个时会自动转化为红黑树，当删除小于六时重新变为链表，为啥呢？"><a href="#14、Hashmap中的链表大小超过八个时会自动转化为红黑树，当删除小于六时重新变为链表，为啥呢？" class="headerlink" title="14、Hashmap中的链表大小超过八个时会自动转化为红黑树，当删除小于六时重新变为链表，为啥呢？"></a>14、Hashmap中的链表大小超过八个时会自动转化为红黑树，当删除小于六时重新变为链表，为啥呢？</h3><p>根据泊松分布，在负载因子默认为0.75的时候，单个hash槽内元素个数为8的概率小于百万分之一，所以将7作为一个分水岭，等于7的时候不转换，大于等于8的时候才进行转换，小于等于6的时候就化为链表。</p>
+<h3 id="15、说一下关于ConcurrentHashMap的并法度、性能问题、数据操作，还有数据结构是什么样的么？（重点理解）"><a href="#15、说一下关于ConcurrentHashMap的并法度、性能问题、数据操作，还有数据结构是什么样的么？（重点理解）" class="headerlink" title="15、说一下关于ConcurrentHashMap的并法度、性能问题、数据操作，还有数据结构是什么样的么？（重点理解）"></a>15、说一下关于ConcurrentHashMap的并法度、性能问题、数据操作，还有数据结构是什么样的么？（重点理解）</h3><p>首先ConcurrentHashMap的底层是基于数组+链表组成的，不过JDK1.7和JDK1.8中具体实现稍微有点不一样，首先说一下它在1.7中的数据结构吧。<br>（1）JDK1.7的时候由Segment数组和HashEntry组成，和HashMap一样为数组+链表，至于并法度问题，<br>那是因为ConcurrentHashMap采用了分段锁技术，其中Segment继承了ReentrantLock，不会像Hasntable那样不管是put还是get操作都需要做同步处理，理论上ConcurrentHashMap支持CurrentLevel(也就是Segment数组数量)的线程并发，每当一个线程占用锁访问一个Segment时，不会影响到其他的Segment，也就是说当容量是16的话，它的并法度就是16，可以同时允许16个线程操作16个Segment并且还是线程安全的。</p>
+<p>（2）关于它put操作：源码中它是先定位到Segment然后再进行put操作，首先第一步的时候尝试获取锁，如果获取失败肯定就有其他线程存在竞争，于是就利用自旋获取锁，简单来说就是第一步：尝试自选获取锁；第二：如果重试的次数达到了最大的扫描次数就改为阻塞锁获取，保证能够获取成功。<br>然后get的逻辑就比较简单了，只要将键通过Hash之后定位到具体的Segment，再通过一次Hash定位到具体的元素上，由于HashEntry中的值属性是用volatile关键词修饰的，保证了内存可见性，所以每次获取时都是最新值，ConcurrentHashMap的get方法是非常高效的，因为整个过程都不需要加锁。</p>
+<p>（3）JDK1.7虽然支持每个Segment并发访问，但是还是存在一些问题，因为基本上还是数组+链表的方式，所以我们去查询的时候还得遍历数组，这样会导致效率很低，这个和JDK1.7的HashMap是存在一样的问题，所以在JDK1.8的时候完全优化了，JDK1.8的时候就抛弃了Segment分段锁，而是采用了CAS+Synchronized来保证并发安全性，跟HashMap很像，也把之前的HashEntry改成了Node，但是作用不变，把值和next采用了volatile去修饰，保证了可见性，同时引入了红黑树，在链表大于一定值的时候会转换(默认值是8)，这就是它的存取操作。</p>
+<h3 id="16、ConcurrentHashMap在进行put操作的时候还是比较复杂的，大致分为以下步骤："><a href="#16、ConcurrentHashMap在进行put操作的时候还是比较复杂的，大致分为以下步骤：" class="headerlink" title="16、ConcurrentHashMap在进行put操作的时候还是比较复杂的，大致分为以下步骤："></a>16、ConcurrentHashMap在进行put操作的时候还是比较复杂的，大致分为以下步骤：</h3><p>（1）根据key计算出HashCode；<br>（2）判断是否需要进行初始化；<br>（3）即为当前Key定位出的Node，如果为空表示当前位置可以写入数据，利用CAS尝试写入，失败则自旋保证成功；<br>（4）如果当前位置的哈希码等于Moved等于-1的话，就需要进行扩容；<br>（5）如果都不满足，则利用Synchronized锁写入数据；<br>（6）如果数量还是大于Treeify_Threshold就要转换成红黑树；</p>
+<h3 id="17、HashMap和ConcurrentHashMap的区别是什么？"><a href="#17、HashMap和ConcurrentHashMap的区别是什么？" class="headerlink" title="17、HashMap和ConcurrentHashMap的区别是什么？"></a>17、HashMap和ConcurrentHashMap的区别是什么？</h3><p>（1）线程安全：ConcurrenrHashMap是线程安全的，HashMap是非线程安全的；</p>
+<p>（2）HashMap的键值对允许有null，但是ConcurrentHashMap都不允许。</p>
+<h3 id="18、HashTable和ConcurrentHashMap的区别是什么？"><a href="#18、HashTable和ConcurrentHashMap的区别是什么？" class="headerlink" title="18、HashTable和ConcurrentHashMap的区别是什么？"></a>18、HashTable和ConcurrentHashMap的区别是什么？</h3><p>（1）底层数据结构：ConcurrenrHashMap在JDK1.7 之前采用的是分段的数组+链表，JDK1.8之后采用的是数据+链表/红黑树；而HashTable在JDK1.8之前都是采用的数组+链表的形式，数组采用的是HashMap的主体，链表主要是为了解决哈希冲突而存在的；</p>
+<p>（2）实现线程安全的方式：① 在JDK1.7的时候，ConcurrentHashMap（分段锁） 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。（默认分配16个Segment，比Hashtable效率提高16倍。） 到了 JDK1.8 的时候已经摒弃了Segment的概念，而是直接用 Node 数组+链表+红黑树的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。（JDK1.6以后 对 synchronized锁做了很多优化） 整个看起来就像是优化过且线程安全的 HashMap，虽然在JDK1.8中还能看到 Segment 的数据结构，但是已经简化了属性，只是为了兼容旧版本；②Hashtable(同一把锁) :使用 synchronized 来保证线程安全，效率非常低下。当一个线程访问同步方法时，其他线程也访问同步方法，可能会进入阻塞或轮询状态，如使用 put 添加元素，另一个线程不能使用 put 添加元素，也不能使用 get，竞争会越来越激烈效率越低。</p>
+<h3 id="19、为什么重写equals方法的时候需要重写hashCode方法？使用HashMap举个例子不？"><a href="#19、为什么重写equals方法的时候需要重写hashCode方法？使用HashMap举个例子不？" class="headerlink" title="19、为什么重写equals方法的时候需要重写hashCode方法？使用HashMap举个例子不？"></a>19、为什么重写equals方法的时候需要重写hashCode方法？使用HashMap举个例子不？</h3><p>因为在java中，所有的对象都是继承于Object类。Ojbect类中有两个方法equals、hashCode，这两个方法都是用来比较两个对象是否相等的。</p>
+<p>在未重写equals方法我们是继承了object的equals方法，那里的 equals是比较两个对象的内存地址，显然我们new了2个对象内存地址肯定不一样</p>
+<p>对于值对象，==比较的是两个对象的值<br>对于引用对象，比较的是两个对象的地址</p>
+<p>在HashMap中是通过key的hashCode去寻找元素索引下标index的，加入某个index为2的是一个链表，我们去get的时候是根据key去hash然后计算出index，重写了equals方法后，去找链表中的元素的时候是找不到的，因此我们重写了equals方法建议一定要重写hashCode方法，以此保证相同的对象返回相同的hash值，不同的对象返回不同的值，不然一个链表的hashCode都一样的，就乱套了。</p>
+<h3 id="20、为什么HashTable不允许键值为null？"><a href="#20、为什么HashTable不允许键值为null？" class="headerlink" title="20、为什么HashTable不允许键值为null？"></a>20、为什么HashTable不允许键值为null？</h3><p>因为Hashtable使用的是安全失败机制（fail-safe），这种机制会使你此次读到的数据不一定是最新的数据。如果你使用的是null，就会使你无法判断对应的key是不存在还是为空，因为你无法再调用一次contain(key)来对key是否存在进行判断，ConcurrentHashMap同理。</p>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><h2 id="1、什么是泛型？"><a href="#1、什么是泛型？" class="headerlink" title="1、什么是泛型？"></a>1、什么是泛型？</h2><ul>
+<li>Java泛型设计规则：只要在编译期间没有出现警告，那么运行期间就不会出现ClassCastException异常；</li>
+<li>泛型：把类型明确的工作推迟到创建对象或者是调用方法的时候才去明确的特殊的类型。</li>
+</ul>
+<p>参数化类型：</p>
+<ul>
+<li>把类型当做是参数一样进行传递；</li>
+<li>&lt;数据类型&gt;只能是引用类型；</li>
+</ul>
+<p>相关术语</p>
+<ul>
+<li>ArrayList<E>中的E称为类型参数变量；</li>
+<li>ArrayList<Integer>中的Integer称为实际类型参数；</li>
+<li>整个ArrayList<E>称为泛型类型；</li>
+<li>整个ArrayList<Integer>称为参数化的类型ParaneterizedType；</li>
+</ul>
+<h2 id="2、为什么需要泛型"><a href="#2、为什么需要泛型" class="headerlink" title="2、为什么需要泛型"></a>2、为什么需要泛型</h2><ul>
+<li><p>没有泛型的时候：<br>Collection、Map集合对元素的类型是没有任何限制的，假设一个Collection集合中装载的全是一个Person对象，但是外面把Pig对象存储也到集合中，这个样是没有任何语法错误的，但是把对象扔进集合中，集合是不知道元素的类型是什么样的，仅仅知道是Object类型的，因此使用get()的时候，返回的是Object。获取该对象的时候还需要进行强制类型转换。</p>
+</li>
+<li><p>有泛型以后：<br>限制了存储对象的类型，代码变得更加简洁，因为获取元素的时候不需要进行强制类型转换了；<br>程序更加健壮，因为只要编译时期没有警告，那么运行时期就不会出现ClassCastException异常；<br>代码的可读性和稳定性更强，因为载编写集合的时候就限制的类型。</p>
+</li>
+</ul>
+<h3 id="2-1-有了泛型后使用增强for遍历集合"><a href="#2-1-有了泛型后使用增强for遍历集合" class="headerlink" title="2.1 有了泛型后使用增强for遍历集合"></a>2.1 有了泛型后使用增强for遍历集合</h3><p>由于我们在创建集合的时候，明确了集合的类型，因此我们可以使用增强for来遍历集合<br> //创建一个集合对象<br>ArrayList<String> list = new ArrayList&lt;&gt;();</p>
+<p>list.add(“hello”);<br>list.add(“world”);<br>list.add(“oldou”);</p>
+<p>//由于明确了类型.我们可以增强for进行遍历<br>for (String str : list) {<br>    System.out.println(str);<br>}</p>
+<h2 id="3、泛型的用法"><a href="#3、泛型的用法" class="headerlink" title="3、泛型的用法"></a>3、泛型的用法</h2><h3 id="3-1-泛型类"><a href="#3-1-泛型类" class="headerlink" title="3.1 泛型类"></a>3.1 泛型类</h3><ul>
+<li>定义：将泛型定义在类上就是泛型类，载使用该类的时候，类型才能确定下来。</li>
+<li>优点：当用户明切了类型，这个类就代表着什么类型，就不用再担心强转以及运行时转化异常的问题了。<br>泛型定义代码示例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">1:把泛型定义在类上</span><br><span class="line">2:类型变量定义在类上,方法中也可以使用</span><br><span class="line">*&#x2F;</span><br><span class="line">public class ObjectTool&lt;T&gt; &#123;</span><br><span class="line">    private T obj;</span><br><span class="line"></span><br><span class="line">    public T getObj() &#123;</span><br><span class="line">        return obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setObj(T obj) &#123;</span><br><span class="line">        this.obj &#x3D; obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>当用户想要使用哪种类型的时候，就在创建的时候指定类型，使用的时候该类就会自动转换成用户想要的使用类型。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    &#x2F;&#x2F;创建对象并指定元素类型</span><br><span class="line">    ObjectTool&lt;String&gt; tool &#x3D; new ObjectTool&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    tool.setObj(new String(&quot;钟福成&quot;));</span><br><span class="line">    String s &#x3D; tool.getObj();</span><br><span class="line">    System.out.println(s);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;创建对象并指定元素类型</span><br><span class="line">    ObjectTool&lt;Integer&gt; objectTool &#x3D; new ObjectTool&lt;&gt;();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 如果我在这个对象里传入的是String类型的,它在编译时期就通过不了了.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    objectTool.setObj(10);</span><br><span class="line">    int i &#x3D; objectTool.getObj();</span><br><span class="line">    System.out.println(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-泛型方法"><a href="#3-2-泛型方法" class="headerlink" title="3.2 泛型方法"></a>3.2 泛型方法</h3>将泛型定义在方法上就叫泛型方法，泛型是先定义后使用的，泛型方法定义如下所示：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;定义泛型方法..</span><br><span class="line">public &lt;T&gt; void show(T t) &#123;</span><br><span class="line">        System.out.println(t);</span><br><span class="line">&#125;</span><br><span class="line">使用时传递进来的是什么类型，返回值就是什么类型的。</span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    &#x2F;&#x2F;创建对象</span><br><span class="line">    ObjectTool tool &#x3D; new ObjectTool();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;调用方法,传入的参数是什么类型,返回值就是什么类型</span><br><span class="line">    tool.show(&quot;hello&quot;);</span><br><span class="line">    tool.show(12);</span><br><span class="line">    tool.show(12.5);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+泛型类时拥有泛型这个特性的类，由于它本质上还是一个Java类，所以它是可以被继承的。<br>而被继承分为两种情况：</li>
+<li>子类明切泛型类的类型参数变量</li>
+<li>子类不明切泛型类的类型参数变量</li>
+</ul>
+<p>（1）子类明切泛型类的类型参数变量</p>
+<ul>
+<li>泛型接口<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">    把泛型定义在接口上</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface Inter&lt;T&gt; &#123;</span><br><span class="line">public abstract void show(T t);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>泛型接口的实现类<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 子类明确泛型类的类型参数变量:</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">public class InterImpl implements Inter&lt;String&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void show(String s) &#123;</span><br><span class="line">        System.out.println(s);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+（2）子类不明确泛型类的类型参数变量</li>
+<li>当子类不明切泛型类的类型参数变量时，外界使用子类的时候，需要传递类型参数变量进来，在实现类上需要定义处类型参数变量。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 子类不明确泛型类的类型参数变量:</span><br><span class="line"> *      实现类也要定义出&lt;T&gt;类型的</span><br><span class="line"> *</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class InterImpl&lt;T&gt; implements Inter&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void show(T t) &#123;</span><br><span class="line">        System.out.println(t);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>测试代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    &#x2F;&#x2F;测试第一种情况</span><br><span class="line">    &#x2F;&#x2F;Inter&lt;String&gt; i &#x3D; new InterImpl();</span><br><span class="line">    &#x2F;&#x2F;i.show(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;第二种情况测试</span><br><span class="line">    Inter&lt;String&gt; ii &#x3D; new InterImpl&lt;&gt;();</span><br><span class="line">    ii.show(&quot;100&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+需要注意的是：</li>
+<li>实现类重写父类的方法时，返回值的类型要和父类一致。</li>
+<li>类上生命的泛型追非静态成员有效。</li>
+</ul>
+<h3 id="3-3-通配符？"><a href="#3-3-通配符？" class="headerlink" title="3.3 通配符？"></a>3.3 通配符？</h3><p>除了使用<T>表示泛型外，还有&lt;?&gt;这种形式，而？就被称为通配符。      </p>
+<ul>
+<li>通配符的出现时喂了指定泛型中的类型范围。<br>通配符有一下三种形式：</li>
+<li>&lt;?&gt;  被称为无限定通配符；</li>
+<li>&lt;? extends T&gt; 被称为有上限通配符；</li>
+<li>&lt;? super T&gt; 被称为又下限通配符；</li>
+</ul>
+<h3 id="3-4-类型擦除"><a href="#3-4-类型擦除" class="headerlink" title="3.4 类型擦除"></a>3.4 类型擦除</h3><p>泛型时Java1.5版本才引进的概念，在此之前是没有泛型的概念的，但显然泛型代码能够很好的和之前版本的代码兼容，这是因为泛型信息只存在于代码的编译阶段，在进入JVM之前，与泛型想改的信息都会被擦除掉，这就叫做类型擦除。</p>
+<p>首先来个小题目：<br>（1）判断一下以下代码的输出情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; l1 &#x3D; new ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;Integer&gt; l2 &#x3D; new ArrayList&lt;Integer&gt;();</span><br><span class="line">           </span><br><span class="line">System.out.println(l1.getClass() &#x3D;&#x3D; l2.getClass());</span><br></pre></td></tr></table></figure>
+<p>输出结果为true，这是因为List<String>和List<Integer>在JVM中的Class都是List.class，泛型的类型被擦除了。<br>（2）类型String和Integer去哪了呢？<br>是由于泛型转译</p>
+<h3 id="3-5-泛型中需要注意的地方"><a href="#3-5-泛型中需要注意的地方" class="headerlink" title="3.5 泛型中需要注意的地方"></a>3.5 泛型中需要注意的地方</h3><ul>
+<li><p>泛型类或泛型方法中是不能直接使用8种基本的数据类型的，而是使用它们的包装类；<br>例如：List<Integer> list = new ArrayList&lt;&gt;();</p>
+</li>
+<li><p>Java中不能创建具体类型的泛型数组</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/08/05/Java%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86%EF%BC%882020%E7%89%88%EF%BC%89/" data-id="ckf1vxjhx0042k0ukhvz7fx5m" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%AE%B9%E5%99%A8/" rel="tag">Java容器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BRedis%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D%E3%80%81%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F%E3%80%81%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Redis的常用命令、配置文件介绍、数据持久化方式、集群搭建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/03/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BC%88RabbitMQ%EF%BC%89%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">学习笔记之消息中间件（RabbitMQ）的学习</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%AE%B9%E5%99%A8/">Java容器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%AE%B9%E5%99%A8/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/">TCP/IP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/">Zookeeper</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">个人博客</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/">经验分享</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%AE%B9%E5%99%A8/" rel="tag">Java容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E5%AD%A6%E4%B9%A0/" rel="tag">Linux学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ%E5%AD%A6%E4%B9%A0/" rel="tag">RabbitMQ学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis%E5%AD%A6%E4%B9%A0/" rel="tag">Redis学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring%E5%AD%A6%E4%B9%A0/" rel="tag">Spring学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP-IP/" rel="tag">TCP/IP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" rel="tag">Zookeeper学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" rel="tag">经验分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">Java基础</a> <a href="/tags/Java%E5%AE%B9%E5%99%A8/" style="font-size: 10px;">Java容器</a> <a href="/tags/Linux%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">Linux学习</a> <a href="/tags/RabbitMQ%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">RabbitMQ学习</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/Redis%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Redis学习</a> <a href="/tags/SpringBoot/" style="font-size: 12.5px;">SpringBoot</a> <a href="/tags/Spring%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Spring学习</a> <a href="/tags/TCP-IP/" style="font-size: 10px;">TCP/IP</a> <a href="/tags/Zookeeper%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">Zookeeper学习</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">个人博客</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">学习笔记</a> <a href="/tags/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" style="font-size: 10px;">经验分享</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 17.5px;">面试题</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/09/09/SpringBoot%E4%B8%AD%E4%BD%BF%E7%94%A8Druid%E6%95%B4%E5%90%88JDBC/">SpringBoot整合JDBC</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/08/%E7%AC%AC%E4%B8%80%E4%B8%AASpringBoot%E7%A8%8B%E5%BA%8F%E4%BB%A5%E5%8F%8A%E5%B0%8F%E5%BD%A9%E8%9B%8B/">第一个SpringBoot程序以及启动图标设置</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/16/Redis%E5%9F%BA%E6%9C%AC%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8Redis%E5%AE%9E%E7%8E%B0%E4%B9%90%E8%A7%82%E9%94%81/">Redis基本事务以及实现乐观锁</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/16/Redis%E7%9A%84%E4%BA%94%E7%A7%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/">Redis的数据类型（5种基础，3种特殊）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BRedis%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D%E3%80%81%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F%E3%80%81%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">Redis的常用命令、配置文件介绍、数据持久化方式、集群搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Mr.ou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
